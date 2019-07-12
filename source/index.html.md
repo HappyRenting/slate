@@ -23,7 +23,7 @@ curl -X GET \
   -d "message=Ceci est un example%0DTest"
 ```
 
-> La commande ci-dessus renvoie JSON structuré comme ceci
+> La commande ci-dessus renvoie un JSON structuré comme ceci
 
 ```json
 {
@@ -66,7 +66,7 @@ Les API utilisent les codes d'erreurs suivants:
 
 Code | Signification
 ---------- | -------
-400 | Bad Request -- La requête est invalide.
-401 | Non autorisé -- Les information d'authentificaton sont invalides.
-404 | Page introuvable -- La page spécifié est introuvable.
+400 | Mauvaise Requête -- La requête est invalide.
+401 | Non Autorisé -- Les information d'authentificaton sont invalides.
+404 | Page Introuvable -- La page spécifié est introuvable.
 500 | Erreur Interne du Serveur -- Nous avons eu un problème avec notre serveur. Réessayez plus tard.
