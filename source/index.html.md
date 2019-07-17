@@ -69,4 +69,5 @@ Code | Signification
 400 | Mauvaise Requête -- La requête est invalide.
 401 | Non Autorisé -- Les information d'authentificaton sont invalides.
 404 | Page Introuvable -- La page spécifié est introuvable.
+429 | Trop de requêtes -- Le client a émis trop de requêtes dans un délai donné.
 500 | Erreur Interne du Serveur -- Nous avons eu un problème avec notre serveur. Réessayez plus tard.
