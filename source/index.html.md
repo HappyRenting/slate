@@ -12,10 +12,51 @@ search: true
 
 # Communication API
 
+## Envoyer un Email
+
+```shell
+curl -X POST \
+  "https://communication.avis-locataire.com/v1/send_email" \
+  -d "auth_key=mykey" \
+  -d "auth_secret=mysecret" \
+  -d "recipient=exemple@mail.com" \
+  -d "subject=Email exemple"
+  -d "message=Ceci est un exemple%0DTest"
+```
+
+> La commande ci-dessus renvoie un JSON structuré comme ceci
+
+```json
+{
+  "status": 200,
+  "message": "Message successfully queued"
+}
+```
+
+Cette requête permet d'envoyer un email simplement.
+
+### Requête HTTP
+
+`POST https://communication.avis-locataire.com/v1/send_email`
+
+### Paramètres de la requête
+
+Paramètre | Description
+--------- | -----------
+auth_key | Clé d'authentification.
+auth_secret | Secret d'authentification correspondant à la clé ci-dessus.
+recipient | Email du destinataire.
+subject | Sujet de l'email.
+message | Contenu du message.
+
+<aside class="warning">
+Attention - Les emails sont envoyés de manière asynchrone
+</aside>
+
 ## Envoyer un SMS
 
 ```shell
-curl -X GET \
+curl -X POST \
   "https://communication.avis-locataire.com/v1/send_sms" \
   -d "auth_key=mykey" \
   -d "auth_secret=mysecret" \
@@ -36,7 +77,7 @@ Cette requête permet d'envoyer un SMS simplement.
 
 ### Requête HTTP
 
-`GET https://communication.avis-locataire.com/v1/send_sms`
+`POST https://communication.avis-locataire.com/v1/send_sms`
 
 ### Paramètres de la requête
 
