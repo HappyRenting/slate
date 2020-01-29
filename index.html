@@ -236,6 +236,9 @@
                   <li>
                     <a href="#envoyer-un-message" class="toc-h2 toc-link" data-title="Envoyer un message">Envoyer un message</a>
                   </li>
+                  <li>
+                    <a href="#liste-des-messages" class="toc-h2 toc-link" data-title="Liste des messages">Liste des messages</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -261,7 +264,7 @@
   -d <span class="s2">"auth_secret=mysecret"</span> <span class="se">\</span>
   -d <span class="s2">"recipient=exemple@mail.com"</span> <span class="se">\</span>
   -d <span class="s2">"subject=Email exemple"</span> <span class="se">\</span>
-  -d <span class="s2">"message=Ceci est un exemple%0DTest"</span>
+  -d <span class="s2">"message=Ceci est un exemple%0ATest"</span>
 </code></pre>
 <blockquote>
 <p>La commande ci-dessus renvoie un JSON structuré comme ceci</p>
@@ -311,7 +314,7 @@ Note - Les emails sont envoyés de manière asynchrone
   -d <span class="s2">"auth_key=mykey"</span> <span class="se">\</span>
   -d <span class="s2">"auth_secret=mysecret"</span> <span class="se">\</span>
   -d <span class="s2">"recipient=0602030405"</span> <span class="se">\</span>
-  -d <span class="s2">"message=Ceci est un example%0DTest"</span>
+  -d <span class="s2">"message=Ceci est un example%0ATest"</span>
 </code></pre>
 <blockquote>
 <p>La commande ci-dessus renvoie un JSON structuré comme ceci</p>
@@ -353,13 +356,14 @@ Note - Les emails sont envoyés de manière asynchrone
 Note - Les SMS sont envoyés de manière asynchrone
 </aside>
 <h2 id='envoyer-un-message'>Envoyer un message</h2><pre class="highlight shell tab-shell"><code>curl -X POST <span class="se">\</span>
-  <span class="s2">"https://communication.avis-locataire.com//v1/messages"</span> <span class="se">\</span>
+  <span class="s2">"https://communication.avis-locataire.com/v1/messages"</span> <span class="se">\</span>
   -d <span class="s2">"auth_key=mykey"</span> <span class="se">\</span>
   -d <span class="s2">"auth_secret=mysecret"</span> <span class="se">\</span>
   -d <span class="s2">"email=exemple@email.com"</span>
   -d <span class="s2">"phone=0602030405"</span> <span class="se">\</span>
   -d <span class="s2">"email_subject=Email exemple"</span> <span class="se">\</span>
-  -d <span class="s2">"email_content=Ceci est un example%0DTest"</span> <span class="se">\</span>
+  -d <span class="s2">"email_content=Ceci est un example%0ATest"</span> <span class="se">\</span>
+  -d <span class="s2">"sms_content=Ceci est un example%0ATest"</span>
   -d <span class="s2">"channel=both"</span>
 </code></pre>
 <blockquote>
@@ -410,13 +414,83 @@ Note - Les SMS sont envoyés de manière asynchrone
 </tr>
 <tr>
 <td>channel</td>
-<td>Canal utilisé, peut être &#39;sms&#39;, &#39;email&#39; ou &#39;both&#39;.</td>
+<td>Canal utilisé, peut être <code>sms</code>, <code>email</code> ou <code>both</code>.</td>
 </tr>
 </tbody></table>
 
 <aside class="notice">
 Note - Les messages sont envoyés de manière asynchrone
 </aside>
+<h2 id='liste-des-messages'>Liste des messages</h2><pre class="highlight shell tab-shell"><code>curl -X GET <span class="se">\</span>
+  <span class="s2">"https://communication.avis-locataire.com/v1/messages"</span> <span class="se">\</span>
+  -d <span class="s2">"auth_key=mykey"</span> <span class="se">\</span>
+  -d <span class="s2">"auth_secret=mysecret"</span> <span class="se">\</span>
+  -d <span class="s2">"with_error=true"</span> <span class="se">\</span>
+  -d <span class="s2">"limit=1"</span> <span class="se">\</span>
+  -d <span class="s2">"offset=0"</span> <span class="se">\</span>
+  -d <span class="s2">"from=2020-01-01T14:00:00Z"</span> <span class="se">\</span>
+  -d <span class="s2">"from=2020-01-31T14:00:00Z"</span>
+</code></pre>
+<blockquote>
+<p>La commande ci-dessus renvoie un JSON structuré comme ceci</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"messages"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"both"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0602030405"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exemple@email.com"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"email_subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Email exemple"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"email_content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ceci est un example%0ATest"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"sms_content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ceci est un example%0ATest"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"has_error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"error_message"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-18T15:31:12Z"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Cette requête permet de récupérer une liste de messages.</p>
+<h3 id='requete-http-4'>Requête HTTP</h3>
+<p><code>GET https://communication.avis-locataire.com/v1/messages</code></p>
+<h3 id='parametres-de-la-requete-4'>Paramètres de la requête</h3>
+<table><thead>
+<tr>
+<th>Nom</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>auth_key</td>
+<td>Clé d&#39;authentification.</td>
+</tr>
+<tr>
+<td>auth_secret</td>
+<td>Secret d&#39;authentification correspondant à la clé ci-dessus.</td>
+</tr>
+<tr>
+<td>with_error</td>
+<td>Récupérer uniquement les messages avec <code>true</code> ou sans <code>false</code> erreurs</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>Nombre maximum de messages retourné.</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>Ignore les <code>N</code> premiers messages.</td>
+</tr>
+<tr>
+<td>from</td>
+<td>Retourne les messages après la date spécifié au format ISO8601.</td>
+</tr>
+<tr>
+<td>until</td>
+<td>Retourne les messages avant la date spécifié au format ISO8601.</td>
+</tr>
+</tbody></table>
 <h1 id='codes-d-39-erreurs'>Codes d&#39;erreurs</h1>
 <blockquote>
 <p>Example d&#39;erreur avec un numéro de télephone invalide</p>
