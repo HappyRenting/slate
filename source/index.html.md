@@ -31,7 +31,7 @@ curl -X POST \
   -d "auth_secret=mysecret" \
   -d "recipient=exemple@mail.com" \
   -d "subject=Email exemple" \
-  -d "message=Ceci est un exemple%0DTest"
+  -d "message=Ceci est un exemple%0ATest"
 ```
 
 > La commande ci-dessus renvoie un JSON structuré comme ceci
@@ -71,7 +71,7 @@ curl -X POST \
   -d "auth_key=mykey" \
   -d "auth_secret=mysecret" \
   -d "recipient=0602030405" \
-  -d "message=Ceci est un example%0DTest"
+  -d "message=Ceci est un example%0ATest"
 ```
 
 > La commande ci-dessus renvoie un JSON structuré comme ceci
@@ -106,13 +106,14 @@ Note - Les SMS sont envoyés de manière asynchrone
 
 ```shell
 curl -X POST \
-  "https://communication.avis-locataire.com//v1/messages" \
+  "https://communication.avis-locataire.com/v1/messages" \
   -d "auth_key=mykey" \
   -d "auth_secret=mysecret" \
   -d "email=exemple@email.com"
   -d "phone=0602030405" \
   -d "email_subject=Email exemple" \
-  -d "email_content=Ceci est un example%0DTest" \
+  -d "email_content=Ceci est un example%0ATest" \
+  -d "sms_content=Ceci est un example%0ATest"
   -d "channel=both"
 ```
 
@@ -142,11 +143,65 @@ phone | Numéro de téléphone du destinataire.
 email_subject | Sujet de l'email.
 email_content | Contenu du message Email.
 sms_content | Contenu du message SMS.
-channel | Canal utilisé, peut être 'sms', 'email' ou 'both'.
+channel | Canal utilisé, peut être `sms`, `email` ou `both`.
 
 <aside class="notice">
 Note - Les messages sont envoyés de manière asynchrone
 </aside>
+
+## Liste des messages
+
+```shell
+curl -X GET \
+  "https://communication.avis-locataire.com/v1/messages" \
+  -d "auth_key=mykey" \
+  -d "auth_secret=mysecret" \
+  -d "with_error=true" \
+  -d "limit=1" \
+  -d "offset=0" \
+  -d "from=2020-01-01T14:00:00Z" \
+  -d "from=2020-01-31T14:00:00Z"
+```
+
+> La commande ci-dessus renvoie un JSON structuré comme ceci
+
+```json
+{
+  "status": 200,
+  "messages": [
+    {
+      "id": 1,
+      "channel": "both",
+      "phone": "0602030405",
+      "email": "exemple@email.com",
+      "email_subject": "Email exemple",
+      "email_content": "Ceci est un example%0ATest",
+      "sms_content": "Ceci est un example%0ATest",
+      "has_error": false,
+      "error_message": null,
+      "created_at": "2020-01-18T15:31:12Z"
+    }
+  ]
+}
+```
+
+Cette requête permet de récupérer une liste de messages.
+
+### Requête HTTP
+
+`GET https://communication.avis-locataire.com/v1/messages`
+
+### Paramètres de la requête
+
+Nom | Description
+--------- | -----------
+auth_key | Clé d'authentification.
+auth_secret | Secret d'authentification correspondant à la clé ci-dessus.
+with_error | Récupérer uniquement les messages avec `true` ou sans `false` erreurs
+limit | Nombre maximum de messages retourné.
+offset | Ignore les `N` premiers messages.
+from | Retourne les messages après la date spécifié au format ISO8601.
+until | Retourne les messages avant la date spécifié au format ISO8601.
 
 # Codes d'erreurs
 
