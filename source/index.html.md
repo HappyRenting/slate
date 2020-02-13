@@ -3,6 +3,7 @@ title: HappyRenting API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
+  - ruby
 
 toc_footers:
   - <a href='https://avis-locataire.com'>Avis-Locataire</a>
@@ -25,21 +26,65 @@ Documentation indisponible pour l'instant
 ## Envoyer un Email
 
 ```shell
+# Envoi d'un email individuel
 curl -X POST \
   "https://communication.avis-locataire.com/v1/send_email" \
-  -d "auth_key=mykey" \
-  -d "auth_secret=mysecret" \
-  -d "recipient=exemple@mail.com" \
-  -d "subject=Email exemple" \
-  -d "message=Ceci est un exemple%0ATest"
+  --data "auth_key=mykey" \
+  --data "auth_secret=mysecret" \
+  --data "recipient=exemple@mail.com" \
+  --data "subject=Email exemple" \
+  --data "message=Ceci est un exemple%0ATest"
+
+# Envoi de plusieurs emails
+curl -X POST \
+  "https://communication.avis-locataire.com/v1/send_email?auth_key=mykey&auth_secret=mysecret" \
+  --header 'Content-Type: application/json' \
+  --data-raw '[
+    {
+      "recipient": "exemple@mail.com",
+      "subject": "Email exemple",
+      "message": "Ceci est un exemple%0ATest"
+    }, {
+      "recipient": "exemple2@mail.com",
+      "subject": "Email exemple2",
+      "message": "Ceci est un exemple2%0ATest"
+    }
+  ]'
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+
+auth_key = 'mykey'
+auth_secret = 'mysecret'
+recipient = 'exemple@mail.com'
+subject = 'Email exemple'
+message = 'Ceci est un exemple%0ATest'
+
+url = URI('https://communication.avis-locataire.com/v1/send_email')
+url.query = "auth_key=#{auth_key}&auth_secret=#{auth_secret}&recipient=#{recipient}&subject=#{subject}&message=#{message}"
+
+http = Net::HTTP.new(url.host, url.port)
+request = Net::HTTP::Post.new(url)
+
+response = http.request(request)
+puts response.read_body
 ```
 
 > La commande ci-dessus renvoie un JSON structuré comme ceci
 
-```json
+```js
+// Exemple de réussite
 {
   "status": 200,
   "message": "Message successfully queued"
+}
+
+// Exemple d'échec (destinataire invalide)
+{
+  "status": 400,
+  "message": "invalid recipient"
 }
 ```
 
@@ -66,20 +111,42 @@ Note - Les emails sont envoyés de manière asynchrone
 ## Envoyer un SMS
 
 ```shell
+# Envoi d'un SMS individuel
 curl -X POST \
   "https://communication.avis-locataire.com/v1/send_sms" \
-  -d "auth_key=mykey" \
-  -d "auth_secret=mysecret" \
-  -d "recipient=0602030405" \
-  -d "message=Ceci est un example%0ATest"
+  --data "auth_key=mykey" \
+  --data "auth_secret=mysecret" \
+  --data "recipient=0602030405" \
+  --data "message=Ceci est un example%0ATest"
+
+# Envoi de plusieurs SMS
+curl -X POST \
+  "https://communication.avis-locataire.com/v1/send_sms?auth_key=mykey&auth_secret=mysecret" \
+  --header 'Content-Type: application/json' \
+  --data-raw '[
+    {
+      "recipient": "0602030405",
+      "message": "Ceci est un exemple%0ATest"
+    }, {
+      "recipient": "0702030405",
+      "message": "Ceci est un exemple2%0ATest"
+    }
+  ]'
 ```
 
 > La commande ci-dessus renvoie un JSON structuré comme ceci
 
-```json
+```js
+// Exemple de réussite
 {
   "status": 200,
   "message": "Message successfully queued"
+}
+
+// Exemple d'échec (destinataire invalide)
+{
+  "status": 400,
+  "message": "invalid recipient"
 }
 ```
 
@@ -105,24 +172,54 @@ Note - Les SMS sont envoyés de manière asynchrone
 ## Envoyer un message
 
 ```shell
+# Envoi d'un message individuel
 curl -X POST \
   "https://communication.avis-locataire.com/v1/messages" \
-  -d "auth_key=mykey" \
-  -d "auth_secret=mysecret" \
-  -d "email=exemple@email.com"
-  -d "phone=0602030405" \
-  -d "email_subject=Email exemple" \
-  -d "email_content=Ceci est un example%0ATest" \
-  -d "sms_content=Ceci est un example%0ATest"
-  -d "channel=both"
+  --data "auth_key=mykey" \
+  --data "auth_secret=mysecret" \
+  --data "email=exemple@email.com"
+  --data "phone=0602030405" \
+  --data "email_subject=Email exemple" \
+  --data "email_content=Ceci est un example%0ATest" \
+  --data "sms_content=Ceci est un example%0ATest"
+  --data "channel=both"
+
+# Envoi de plusieurs messages
+curl -X POST \
+  "https://communication.avis-locataire.com/v1/messages?auth_key=mykey&auth_secret=mysecret" \
+  --header 'Content-Type: application/json' \
+  --data-raw '[
+    {
+      "email": "exemple@email.com",
+      "phone": "0602030405",
+      "email_subject": "Email exemple",
+      "email_content": "Ceci est un exemple%0ATest"
+      "sms_content": "Ceci est un example%0ATest",
+      "channel": "both"
+    }, {
+      "email": "exemple2@email.com",
+      "phone": "0702030405",
+      "email_subject": "Email exemple2",
+      "email_content": "Ceci est un exemple2%0ATest"
+      "sms_content": "Ceci est un example2%0ATest",
+      "channel": "both"
+    }
+  ]'
 ```
 
 > La commande ci-dessus renvoie un JSON structuré comme ceci
 
-```json
+```js
+// Exemple de réussite
 {
   "status": 200,
   "message": "Message successfully queued"
+}
+
+// Exemple d'échec (destinataire invalide)
+{
+  "status": 400,
+  "message": "invalid recipient"
 }
 ```
 
@@ -205,12 +302,12 @@ until | Retourne les messages avant la date spécifié au format ISO8601.
 
 # Codes d'erreurs
 
-> Example d'erreur avec un numéro de télephone invalide
+> Exemple d'une erreur interne du serveur
 
 ```json
 {
-  "status": 400,
-  "message": "invalid recipient"
+  "status": 500,
+  "message": "internal server error"
 }
 ```
 
