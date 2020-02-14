@@ -201,7 +201,7 @@
       <script src="javascripts/all-c5541673.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;]">
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;,&quot;javascript&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -213,6 +213,7 @@
         <div class="lang-selector">
               <a href="#" data-language-name="shell">shell</a>
               <a href="#" data-language-name="ruby">ruby</a>
+              <a href="#" data-language-name="javascript">javascript</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Recherche">
@@ -300,26 +301,62 @@ curl -X POST <span class="se">\</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
 <span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="s1">'https://communication.avis-locataire.com/v1/send_email'</span>
+
+<span class="kd">var</span> <span class="nx">requestOptions</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">method</span><span class="p">:</span> <span class="s1">'POST'</span><span class="p">,</span>
+  <span class="na">redirect</span><span class="p">:</span> <span class="s1">'follow'</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">auth_key</span> <span class="o">=</span> <span class="s1">'mykey'</span>
+<span class="kd">var</span> <span class="nx">auth_secret</span> <span class="o">=</span> <span class="s1">'mysecret'</span>
+<span class="kd">var</span> <span class="nx">recipient</span> <span class="o">=</span> <span class="s1">'exemple@mail.com'</span>
+<span class="kd">var</span> <span class="nx">subject</span> <span class="o">=</span> <span class="s1">'Email exemple'</span>
+<span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s1">'Ceci est un exemple%0ATest'</span>
+
+<span class="nx">fetch</span><span class="p">(</span>
+  <span class="s2">`</span><span class="p">${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">?auth_key=</span><span class="p">${</span><span class="nx">auth_key</span><span class="p">}</span><span class="s2">&amp;auth_secret=</span><span class="p">${</span><span class="nx">auth_secret</span><span class="p">}</span><span class="s2">&amp;recipient=</span><span class="p">${</span><span class="nx">recipient</span><span class="p">}</span><span class="s2">&amp;subject=</span><span class="p">${</span><span class="nx">subject</span><span class="p">}</span><span class="s2">&amp;message=</span><span class="p">${</span><span class="nx">message</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span>
+  <span class="nx">requestOptions</span>
+<span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">())</span>
+ <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
+ <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="nx">error</span><span class="p">))</span>
 </code></pre>
 <blockquote>
-<p>La commande ci-dessus renvoie un JSON structuré comme ceci</p>
+<p>Les commandes ci-dessus renvoient un JSON structuré comme ceci</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="c1">// Exemple de réussite</span>
+<pre class="highlight javascript"><code><span class="c1">// Exemple de réussite pour un envoi unique</span>
 <span class="p">{</span>
   <span class="s2">"status"</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
   <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Message successfully queued"</span>
 <span class="p">}</span>
 
-<span class="c1">// Exemple d'échec (destinataire invalide)</span>
+<span class="c1">// Exemple d'échec pour un envoi unique (destinataire invalide)</span>
 <span class="p">{</span>
   <span class="s2">"status"</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span>
   <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"invalid recipient"</span>
 <span class="p">}</span>
+
+<span class="c1">// Exemple pour un envoi multiple</span>
+<span class="p">{</span>
+  <span class="s2">"status"</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+  <span class="s2">"messages"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">"error"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="s2">"recipient"</span><span class="p">:</span> <span class="s2">"0602030405"</span><span class="p">,</span>
+      <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Message successfully queued"</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">"error"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="s2">"recipient"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"message can't be blank"</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
 </code></pre>
-<p>Cette requête permet d&#39;envoyer un email simplement.</p>
+<p>Cette requête permet d&#39;envoyer un ou plusieurs emails simplement.</p>
 <h3 id='requete-http'>Requête HTTP</h3>
 <p><code>POST https://communication.avis-locataire.com/v1/send_email</code></p>
-<h3 id='parametres-de-la-requete'>Paramètres de la requête</h3>
+<h3 id='parametres-url-de-la-requete-pour-un-envoi-unique'>Paramètres URL de la requête pour un envoi unique</h3>
 <table><thead>
 <tr>
 <th>Nom</th>
@@ -328,23 +365,61 @@ curl -X POST <span class="se">\</span>
 </thead><tbody>
 <tr>
 <td>auth_key</td>
-<td>Clé d&#39;authentification.</td>
+<td>Clé d&#39;authentification</td>
 </tr>
 <tr>
 <td>auth_secret</td>
-<td>Secret d&#39;authentification correspondant à la clé ci-dessus.</td>
+<td>Secret d&#39;authentification correspondant à la clé ci-dessus</td>
 </tr>
 <tr>
 <td>recipient</td>
-<td>Email du destinataire.</td>
+<td>Email du destinataire</td>
 </tr>
 <tr>
 <td>subject</td>
-<td>Sujet de l&#39;email.</td>
+<td>Sujet de l&#39;email</td>
 </tr>
 <tr>
 <td>message</td>
-<td>Contenu du message.</td>
+<td>Contenu du message</td>
+</tr>
+</tbody></table>
+<h3 id='parametres-url-de-la-requete-pour-un-envoi-multiple'>Paramètres URL de la requête pour un envoi multiple</h3>
+<table><thead>
+<tr>
+<th>Nom</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>auth_key</td>
+<td>Clé d&#39;authentification</td>
+</tr>
+<tr>
+<td>auth_secret</td>
+<td>Secret d&#39;authentification correspondant à la clé ci-dessus</td>
+</tr>
+</tbody></table>
+
+<p>Dans le cas d&#39;un envoi multiple, le corps de la requête HTTP doit contenir un tableau JSON contenant des objets structurés comme ci-dessous.</p>
+
+<table><thead>
+<tr>
+<th>Valeur</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>recipient</td>
+<td>Email du destinataire</td>
+</tr>
+<tr>
+<td>subject</td>
+<td>Sujet de l&#39;email</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Contenu du message</td>
 </tr>
 </tbody></table>
 
@@ -372,26 +447,101 @@ curl -X POST <span class="se">\</span>
       "message": "Ceci est un exemple2%0ATest"
     }
   ]'</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+
+<span class="n">auth_key</span> <span class="o">=</span> <span class="s1">'mykey'</span>
+<span class="n">auth_secret</span> <span class="o">=</span> <span class="s1">'mysecret'</span>
+<span class="n">recipient</span> <span class="o">=</span> <span class="s1">'0602030405'</span>
+<span class="n">message</span> <span class="o">=</span> <span class="s1">'Ceci est un exemple%0ATest'</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s1">'https://communication.avis-locataire.com/v1/send_sms'</span><span class="p">)</span>
+<span class="n">url</span><span class="p">.</span><span class="nf">query</span> <span class="o">=</span> <span class="s2">"auth_key=</span><span class="si">#{</span><span class="n">auth_key</span><span class="si">}</span><span class="s2">&amp;auth_secret=</span><span class="si">#{</span><span class="n">auth_secret</span><span class="si">}</span><span class="s2">&amp;recipient=</span><span class="si">#{</span><span class="n">recipient</span><span class="si">}</span><span class="s2">&amp;message=</span><span class="si">#{</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span>
+
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="s1">'https://communication.avis-locataire.com/v1/send_sms'</span>
+
+<span class="kd">var</span> <span class="nx">requestOptions</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">method</span><span class="p">:</span> <span class="s1">'POST'</span><span class="p">,</span>
+  <span class="na">redirect</span><span class="p">:</span> <span class="s1">'follow'</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">auth_key</span> <span class="o">=</span> <span class="s1">'mykey'</span>
+<span class="kd">var</span> <span class="nx">auth_secret</span> <span class="o">=</span> <span class="s1">'mysecret'</span>
+<span class="kd">var</span> <span class="nx">recipient</span> <span class="o">=</span> <span class="s1">'0602030405'</span>
+<span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s1">'Ceci est un exemple%0ATest'</span>
+
+<span class="nx">fetch</span><span class="p">(</span>
+  <span class="s2">`</span><span class="p">${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">?auth_key=</span><span class="p">${</span><span class="nx">auth_key</span><span class="p">}</span><span class="s2">&amp;auth_secret=</span><span class="p">${</span><span class="nx">auth_secret</span><span class="p">}</span><span class="s2">&amp;recipient=</span><span class="p">${</span><span class="nx">recipient</span><span class="p">}</span><span class="s2">&amp;message=</span><span class="p">${</span><span class="nx">message</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span>
+  <span class="nx">requestOptions</span>
+<span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">())</span>
+ <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
+ <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="nx">error</span><span class="p">))</span>
 </code></pre>
 <blockquote>
-<p>La commande ci-dessus renvoie un JSON structuré comme ceci</p>
+<p>Les commandes ci-dessus renvoient un JSON structuré comme ceci</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="c1">// Exemple de réussite</span>
+<pre class="highlight javascript"><code><span class="c1">// Exemple de réussite pour un envoi unique</span>
 <span class="p">{</span>
   <span class="s2">"status"</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
   <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Message successfully queued"</span>
 <span class="p">}</span>
 
-<span class="c1">// Exemple d'échec (destinataire invalide)</span>
+<span class="c1">// Exemple d'échec pour un envoi unique (destinataire invalide)</span>
 <span class="p">{</span>
   <span class="s2">"status"</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span>
   <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"invalid recipient"</span>
+<span class="p">}</span>
+
+<span class="c1">// Exemple pour un envoi multiple</span>
+<span class="p">{</span>
+  <span class="s2">"status"</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+  <span class="s2">"messages"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">"error"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="s2">"recipient"</span><span class="p">:</span> <span class="s2">"0602030405"</span><span class="p">,</span>
+      <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Message successfully queued"</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">"error"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="s2">"recipient"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"message can't be blank"</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
 <span class="p">}</span>
 </code></pre>
 <p>Cette requête permet d&#39;envoyer un SMS simplement.</p>
 <h3 id='requete-http-2'>Requête HTTP</h3>
 <p><code>POST https://communication.avis-locataire.com/v1/send_sms</code></p>
-<h3 id='parametres-de-la-requete-2'>Paramètres de la requête</h3>
+<h3 id='parametres-de-la-requete-pour-un-envoi-unique'>Paramètres de la requête pour un envoi unique</h3>
+<table><thead>
+<tr>
+<th>Nom</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>auth_key</td>
+<td>Clé d&#39;authentification</td>
+</tr>
+<tr>
+<td>auth_secret</td>
+<td>Secret d&#39;authentification correspondant à la clé ci-dessus</td>
+</tr>
+<tr>
+<td>recipient</td>
+<td>Numéro de téléphone du destinataire</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Contenu du message</td>
+</tr>
+</tbody></table>
+<h3 id='parametres-url-de-la-requete-pour-un-envoi-multiple-2'>Paramètres URL de la requête pour un envoi multiple</h3>
 <table><thead>
 <tr>
 <th>Nom</th>
@@ -406,13 +556,23 @@ curl -X POST <span class="se">\</span>
 <td>auth_secret</td>
 <td>Secret d&#39;authentification correspondant à la clé ci-dessus.</td>
 </tr>
+</tbody></table>
+
+<p>Dans le cas d&#39;un envoi multiple, le corps de la requête HTTP doit contenir un tableau JSON contenant des objets structurés comme ci-dessous.</p>
+
+<table><thead>
+<tr>
+<th>Valeur</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
 <tr>
 <td>recipient</td>
-<td>Numéro de téléphone du destinataire.</td>
+<td>Numéro de téléphone du destinataire</td>
 </tr>
 <tr>
 <td>message</td>
-<td>Contenu du message.</td>
+<td>Contenu du message</td>
 </tr>
 </tbody></table>
 
@@ -456,22 +616,41 @@ curl -X POST <span class="se">\</span>
 <blockquote>
 <p>La commande ci-dessus renvoie un JSON structuré comme ceci</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="c1">// Exemple de réussite</span>
+<pre class="highlight javascript"><code><span class="c1">// Exemple de réussite pour un envoi unique</span>
 <span class="p">{</span>
   <span class="s2">"status"</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
   <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Message successfully queued"</span>
 <span class="p">}</span>
 
-<span class="c1">// Exemple d'échec (destinataire invalide)</span>
+<span class="c1">// Exemple d'échec pour un envoi unique (destinataire invalide)</span>
 <span class="p">{</span>
   <span class="s2">"status"</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span>
   <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"invalid recipient"</span>
 <span class="p">}</span>
+
+<span class="c1">// Exemple pour un envoi multiple</span>
+<span class="p">{</span>
+  <span class="s2">"status"</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+  <span class="s2">"messages"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">"error"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="s2">"email"</span><span class="p">:</span> <span class="s2">"exemple@email.com"</span><span class="p">,</span>
+      <span class="s2">"phone"</span><span class="p">:</span> <span class="s2">"0602030405"</span><span class="p">,</span>
+      <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Message successfully queued"</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">"error"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="s2">"email"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="s2">"phone"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"message can't be blank"</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
 </code></pre>
 <p>Cette requête permet d&#39;envoyer un message par SMS/Email ou les deux en même temps.</p>
 <h3 id='requete-http-3'>Requête HTTP</h3>
-<p><code>POST https://communication.avis-locataire.com/v1/send_sms</code></p>
-<h3 id='parametres-de-la-requete-3'>Paramètres de la requête</h3>
+<p><code>POST https://communication.avis-locataire.com/v1/messages</code></p>
+<h3 id='parametres-de-la-requete-pour-un-envoi-unique-2'>Paramètres de la requête pour un envoi unique</h3>
 <table><thead>
 <tr>
 <th>Nom</th>
@@ -480,35 +659,85 @@ curl -X POST <span class="se">\</span>
 </thead><tbody>
 <tr>
 <td>auth_key</td>
-<td>Clé d&#39;authentification.</td>
+<td>Clé d&#39;authentification</td>
 </tr>
 <tr>
 <td>auth_secret</td>
-<td>Secret d&#39;authentification correspondant à la clé ci-dessus.</td>
+<td>Secret d&#39;authentification correspondant à la clé ci-dessus</td>
 </tr>
 <tr>
 <td>email</td>
-<td>Email du destinataire.</td>
+<td>Email du destinataire</td>
 </tr>
 <tr>
 <td>phone</td>
-<td>Numéro de téléphone du destinataire.</td>
+<td>Numéro de téléphone du destinataire</td>
 </tr>
 <tr>
 <td>email_subject</td>
-<td>Sujet de l&#39;email.</td>
+<td>Sujet de l&#39;email</td>
 </tr>
 <tr>
 <td>email_content</td>
-<td>Contenu du message Email.</td>
+<td>Contenu du message Email</td>
 </tr>
 <tr>
 <td>sms_content</td>
-<td>Contenu du message SMS.</td>
+<td>Contenu du message SMS</td>
 </tr>
 <tr>
 <td>channel</td>
-<td>Canal utilisé, peut être <code>sms</code>, <code>email</code> ou <code>both</code>.</td>
+<td>Canal utilisé, peut être <code>sms</code>, <code>email</code> ou <code>both</code></td>
+</tr>
+</tbody></table>
+<h3 id='parametres-url-de-la-requete-pour-un-envoi-multiple-3'>Paramètres URL de la requête pour un envoi multiple</h3>
+<table><thead>
+<tr>
+<th>Nom</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>auth_key</td>
+<td>Clé d&#39;authentification</td>
+</tr>
+<tr>
+<td>auth_secret</td>
+<td>Secret d&#39;authentification correspondant à la clé ci-dessus</td>
+</tr>
+</tbody></table>
+
+<p>Dans le cas d&#39;un envoi multiple, le corps de la requête HTTP doit contenir un tableau JSON contenant des objets structurés comme ci-dessous.</p>
+
+<table><thead>
+<tr>
+<th>Valeur</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>email</td>
+<td>Email du destinataire</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>Numéro de téléphone du destinataire</td>
+</tr>
+<tr>
+<td>email_subject</td>
+<td>Sujet de l&#39;email</td>
+</tr>
+<tr>
+<td>email_content</td>
+<td>Contenu du message Email</td>
+</tr>
+<tr>
+<td>sms_content</td>
+<td>Contenu du message SMS</td>
+</tr>
+<tr>
+<td>channel</td>
+<td>Canal utilisé, peut être <code>sms</code>, <code>email</code> ou <code>both</code></td>
 </tr>
 </tbody></table>
 
@@ -517,13 +746,13 @@ Note - Les messages sont envoyés de manière asynchrone
 </aside>
 <h2 id='liste-des-messages'>Liste des messages</h2><pre class="highlight shell tab-shell"><code>curl -X GET <span class="se">\</span>
   <span class="s2">"https://communication.avis-locataire.com/v1/messages"</span> <span class="se">\</span>
-  -d <span class="s2">"auth_key=mykey"</span> <span class="se">\</span>
-  -d <span class="s2">"auth_secret=mysecret"</span> <span class="se">\</span>
-  -d <span class="s2">"with_error=true"</span> <span class="se">\</span>
-  -d <span class="s2">"limit=1"</span> <span class="se">\</span>
-  -d <span class="s2">"offset=0"</span> <span class="se">\</span>
-  -d <span class="s2">"from=2020-01-01T14:00:00Z"</span> <span class="se">\</span>
-  -d <span class="s2">"from=2020-01-31T14:00:00Z"</span>
+  --data <span class="s2">"auth_key=mykey"</span> <span class="se">\</span>
+  --data <span class="s2">"auth_secret=mysecret"</span> <span class="se">\</span>
+  --data <span class="s2">"with_error=true"</span> <span class="se">\</span>
+  --data <span class="s2">"limit=1"</span> <span class="se">\</span>
+  --data <span class="s2">"offset=0"</span> <span class="se">\</span>
+  --data <span class="s2">"from=2020-01-01T14:00:00Z"</span> <span class="se">\</span>
+  --data <span class="s2">"from=2020-01-31T14:00:00Z"</span>
 </code></pre>
 <blockquote>
 <p>La commande ci-dessus renvoie un JSON structuré comme ceci</p>
@@ -549,7 +778,7 @@ Note - Les messages sont envoyés de manière asynchrone
 <p>Cette requête permet de récupérer une liste de messages.</p>
 <h3 id='requete-http-4'>Requête HTTP</h3>
 <p><code>GET https://communication.avis-locataire.com/v1/messages</code></p>
-<h3 id='parametres-de-la-requete-4'>Paramètres de la requête</h3>
+<h3 id='parametres-de-la-requete'>Paramètres de la requête</h3>
 <table><thead>
 <tr>
 <th>Nom</th>
@@ -629,6 +858,7 @@ Note - Les messages sont envoyés de manière asynchrone
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">shell</a>
                 <a href="#" data-language-name="ruby">ruby</a>
+                <a href="#" data-language-name="javascript">javascript</a>
           </div>
       </div>
     </div>
