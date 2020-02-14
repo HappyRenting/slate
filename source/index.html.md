@@ -4,6 +4,7 @@ title: HappyRenting API Reference
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
   - ruby
+  - javascript
 
 toc_footers:
   - <a href='https://avis-locataire.com'>Avis-Locataire</a>
@@ -72,37 +73,93 @@ response = http.request(request)
 puts response.read_body
 ```
 
-> La commande ci-dessus renvoie un JSON structuré comme ceci
+```javascript
+var endpoint = 'https://communication.avis-locataire.com/v1/send_email'
+
+var requestOptions = {
+  method: 'POST',
+  redirect: 'follow'
+}
+
+var auth_key = 'mykey'
+var auth_secret = 'mysecret'
+var recipient = 'exemple@mail.com'
+var subject = 'Email exemple'
+var message = 'Ceci est un exemple%0ATest'
+
+fetch(
+  `${endpoint}?auth_key=${auth_key}&auth_secret=${auth_secret}&recipient=${recipient}&subject=${subject}&message=${message}`,
+  requestOptions
+).then(response => response.text())
+ .then(result => console.log(result))
+ .catch(error => console.log('error', error))
+```
+
+> Les commandes ci-dessus renvoient un JSON structuré comme ceci
 
 ```js
-// Exemple de réussite
+// Exemple de réussite pour un envoi unique
 {
   "status": 200,
   "message": "Message successfully queued"
 }
 
-// Exemple d'échec (destinataire invalide)
+// Exemple d'échec pour un envoi unique (destinataire invalide)
 {
   "status": 400,
   "message": "invalid recipient"
 }
+
+// Exemple pour un envoi multiple
+{
+  "status": 200,
+  "messages": [
+    {
+      "error": false,
+      "recipient": "0602030405",
+      "message": "Message successfully queued"
+    },
+    {
+      "error": true,
+      "recipient": null,
+      "message": "message can't be blank"
+    }
+  ]
+}
 ```
 
-Cette requête permet d'envoyer un email simplement.
+Cette requête permet d'envoyer un ou plusieurs emails simplement.
 
 ### Requête HTTP
 
 `POST https://communication.avis-locataire.com/v1/send_email`
 
-### Paramètres de la requête
+### Paramètres URL de la requête pour un envoi unique
 
 Nom | Description
 --------- | -----------
-auth_key | Clé d'authentification.
-auth_secret | Secret d'authentification correspondant à la clé ci-dessus.
-recipient | Email du destinataire.
-subject | Sujet de l'email.
-message | Contenu du message.
+auth_key | Clé d'authentification
+auth_secret | Secret d'authentification correspondant à la clé ci-dessus
+recipient | Email du destinataire
+subject | Sujet de l'email
+message | Contenu du message
+
+
+### Paramètres URL de la requête pour un envoi multiple
+
+Nom | Description
+--------- | -----------
+auth_key | Clé d'authentification
+auth_secret | Secret d'authentification correspondant à la clé ci-dessus
+
+Dans le cas d'un envoi multiple, le corps de la requête HTTP doit contenir un tableau JSON contenant des objets structurés comme ci-dessous.
+
+Valeur | Description
+--------- | -----------
+recipient | Email du destinataire
+subject | Sujet de l'email
+message | Contenu du message
+
 
 <aside class="notice">
 Note - Les emails sont envoyés de manière asynchrone
@@ -134,19 +191,76 @@ curl -X POST \
   ]'
 ```
 
-> La commande ci-dessus renvoie un JSON structuré comme ceci
+```ruby
+require 'uri'
+require 'net/http'
+
+auth_key = 'mykey'
+auth_secret = 'mysecret'
+recipient = '0602030405'
+message = 'Ceci est un exemple%0ATest'
+
+url = URI('https://communication.avis-locataire.com/v1/send_sms')
+url.query = "auth_key=#{auth_key}&auth_secret=#{auth_secret}&recipient=#{recipient}&message=#{message}"
+
+http = Net::HTTP.new(url.host, url.port)
+request = Net::HTTP::Post.new(url)
+
+response = http.request(request)
+puts response.read_body
+```
+
+```javascript
+var endpoint = 'https://communication.avis-locataire.com/v1/send_sms'
+
+var requestOptions = {
+  method: 'POST',
+  redirect: 'follow'
+}
+
+var auth_key = 'mykey'
+var auth_secret = 'mysecret'
+var recipient = '0602030405'
+var message = 'Ceci est un exemple%0ATest'
+
+fetch(
+  `${endpoint}?auth_key=${auth_key}&auth_secret=${auth_secret}&recipient=${recipient}&message=${message}`,
+  requestOptions
+).then(response => response.text())
+ .then(result => console.log(result))
+ .catch(error => console.log('error', error))
+```
+
+> Les commandes ci-dessus renvoient un JSON structuré comme ceci
 
 ```js
-// Exemple de réussite
+// Exemple de réussite pour un envoi unique
 {
   "status": 200,
   "message": "Message successfully queued"
 }
 
-// Exemple d'échec (destinataire invalide)
+// Exemple d'échec pour un envoi unique (destinataire invalide)
 {
   "status": 400,
   "message": "invalid recipient"
+}
+
+// Exemple pour un envoi multiple
+{
+  "status": 200,
+  "messages": [
+    {
+      "error": false,
+      "recipient": "0602030405",
+      "message": "Message successfully queued"
+    },
+    {
+      "error": true,
+      "recipient": null,
+      "message": "message can't be blank"
+    }
+  ]
 }
 ```
 
@@ -156,14 +270,28 @@ Cette requête permet d'envoyer un SMS simplement.
 
 `POST https://communication.avis-locataire.com/v1/send_sms`
 
-### Paramètres de la requête
+### Paramètres de la requête pour un envoi unique
+
+Nom | Description
+--------- | -----------
+auth_key | Clé d'authentification
+auth_secret | Secret d'authentification correspondant à la clé ci-dessus
+recipient | Numéro de téléphone du destinataire
+message | Contenu du message
+
+### Paramètres URL de la requête pour un envoi multiple
 
 Nom | Description
 --------- | -----------
 auth_key | Clé d'authentification.
 auth_secret | Secret d'authentification correspondant à la clé ci-dessus.
-recipient | Numéro de téléphone du destinataire.
-message | Contenu du message.
+
+Dans le cas d'un envoi multiple, le corps de la requête HTTP doit contenir un tableau JSON contenant des objets structurés comme ci-dessous.
+
+Valeur | Description
+--------- | -----------
+recipient | Numéro de téléphone du destinataire
+message | Contenu du message
 
 <aside class="notice">
 Note - Les SMS sont envoyés de manière asynchrone
@@ -210,16 +338,35 @@ curl -X POST \
 > La commande ci-dessus renvoie un JSON structuré comme ceci
 
 ```js
-// Exemple de réussite
+// Exemple de réussite pour un envoi unique
 {
   "status": 200,
   "message": "Message successfully queued"
 }
 
-// Exemple d'échec (destinataire invalide)
+// Exemple d'échec pour un envoi unique (destinataire invalide)
 {
   "status": 400,
   "message": "invalid recipient"
+}
+
+// Exemple pour un envoi multiple
+{
+  "status": 200,
+  "messages": [
+    {
+      "error": false,
+      "email": "exemple@email.com",
+      "phone": "0602030405",
+      "message": "Message successfully queued"
+    },
+    {
+      "error": true,
+      "email": null,
+      "phone": null,
+      "message": "message can't be blank"
+    }
+  ]
 }
 ```
 
@@ -227,20 +374,38 @@ Cette requête permet d'envoyer un message par SMS/Email ou les deux en même te
 
 ### Requête HTTP
 
-`POST https://communication.avis-locataire.com/v1/send_sms`
+`POST https://communication.avis-locataire.com/v1/messages`
 
-### Paramètres de la requête
+### Paramètres de la requête pour un envoi unique
 
 Nom | Description
 --------- | -----------
-auth_key | Clé d'authentification.
-auth_secret | Secret d'authentification correspondant à la clé ci-dessus.
-email | Email du destinataire.
-phone | Numéro de téléphone du destinataire.
-email_subject | Sujet de l'email.
-email_content | Contenu du message Email.
-sms_content | Contenu du message SMS.
-channel | Canal utilisé, peut être `sms`, `email` ou `both`.
+auth_key | Clé d'authentification
+auth_secret | Secret d'authentification correspondant à la clé ci-dessus
+email | Email du destinataire
+phone | Numéro de téléphone du destinataire
+email_subject | Sujet de l'email
+email_content | Contenu du message Email
+sms_content | Contenu du message SMS
+channel | Canal utilisé, peut être `sms`, `email` ou `both`
+
+### Paramètres URL de la requête pour un envoi multiple
+
+Nom | Description
+--------- | -----------
+auth_key | Clé d'authentification
+auth_secret | Secret d'authentification correspondant à la clé ci-dessus
+
+Dans le cas d'un envoi multiple, le corps de la requête HTTP doit contenir un tableau JSON contenant des objets structurés comme ci-dessous.
+
+Valeur | Description
+--------- | -----------
+email | Email du destinataire
+phone | Numéro de téléphone du destinataire
+email_subject | Sujet de l'email
+email_content | Contenu du message Email
+sms_content | Contenu du message SMS
+channel | Canal utilisé, peut être `sms`, `email` ou `both`
 
 <aside class="notice">
 Note - Les messages sont envoyés de manière asynchrone
@@ -251,13 +416,13 @@ Note - Les messages sont envoyés de manière asynchrone
 ```shell
 curl -X GET \
   "https://communication.avis-locataire.com/v1/messages" \
-  -d "auth_key=mykey" \
-  -d "auth_secret=mysecret" \
-  -d "with_error=true" \
-  -d "limit=1" \
-  -d "offset=0" \
-  -d "from=2020-01-01T14:00:00Z" \
-  -d "from=2020-01-31T14:00:00Z"
+  --data "auth_key=mykey" \
+  --data "auth_secret=mysecret" \
+  --data "with_error=true" \
+  --data "limit=1" \
+  --data "offset=0" \
+  --data "from=2020-01-01T14:00:00Z" \
+  --data "from=2020-01-31T14:00:00Z"
 ```
 
 > La commande ci-dessus renvoie un JSON structuré comme ceci
