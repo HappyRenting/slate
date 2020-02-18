@@ -34,6 +34,7 @@ curl -X POST \
   --data "auth_secret=mysecret" \
   --data "recipient=exemple@mail.com" \
   --data "subject=Email exemple" \
+  --data "identifier=001"
   --data "message=Ceci est un exemple%0ATest"
 
 # Envoi de plusieurs emails
@@ -44,10 +45,12 @@ curl -X POST \
     {
       "recipient": "exemple@mail.com",
       "subject": "Email exemple",
+      "identifier": "001",
       "message": "Ceci est un exemple%0ATest"
     }, {
       "recipient": "exemple2@mail.com",
       "subject": "Email exemple2",
+      "identifier": "002",
       "message": "Ceci est un exemple2%0ATest"
     }
   ]'
@@ -61,10 +64,11 @@ auth_key = 'mykey'
 auth_secret = 'mysecret'
 recipient = 'exemple@mail.com'
 subject = 'Email exemple'
+identifier = '001'
 message = 'Ceci est un exemple%0ATest'
 
 url = URI('https://communication.avis-locataire.com/v1/send_email')
-url.query = "auth_key=#{auth_key}&auth_secret=#{auth_secret}&recipient=#{recipient}&subject=#{subject}&message=#{message}"
+url.query = "auth_key=#{auth_key}&auth_secret=#{auth_secret}&recipient=#{recipient}&subject=#{subject}&identifier=#{identifier}&message=#{message}"
 
 http = Net::HTTP.new(url.host, url.port)
 request = Net::HTTP::Post.new(url)
@@ -85,10 +89,11 @@ var auth_key = 'mykey'
 var auth_secret = 'mysecret'
 var recipient = 'exemple@mail.com'
 var subject = 'Email exemple'
+var identifier = "001"
 var message = 'Ceci est un exemple%0ATest'
 
 fetch(
-  `${endpoint}?auth_key=${auth_key}&auth_secret=${auth_secret}&recipient=${recipient}&subject=${subject}&message=${message}`,
+  `${endpoint}?auth_key=${auth_key}&auth_secret=${auth_secret}&recipient=${recipient}&subject=${subject}&identifier=${identifier}&message=${message}`,
   requestOptions
 ).then(response => response.text())
  .then(result => console.log(result))
@@ -142,6 +147,7 @@ auth_key | Clé d'authentification
 auth_secret | Secret d'authentification correspondant à la clé ci-dessus
 recipient | Email du destinataire
 subject | Sujet de l'email
+identifier | Paramètre optionel pour identifier en interne le message/envoi
 message | Contenu du message
 
 
@@ -158,6 +164,7 @@ Valeur | Description
 --------- | -----------
 recipient | Email du destinataire
 subject | Sujet de l'email
+identifier | Paramètre optionel pour identifier en interne le message/envoi
 message | Contenu du message
 
 
@@ -174,6 +181,7 @@ curl -X POST \
   --data "auth_key=mykey" \
   --data "auth_secret=mysecret" \
   --data "recipient=0602030405" \
+  --data "identifier=001"
   --data "message=Ceci est un example%0ATest"
 
 # Envoi de plusieurs SMS
@@ -183,9 +191,11 @@ curl -X POST \
   --data-raw '[
     {
       "recipient": "0602030405",
+      "identifier": "001",
       "message": "Ceci est un exemple%0ATest"
     }, {
       "recipient": "0702030405",
+      "identifier": "002",
       "message": "Ceci est un exemple2%0ATest"
     }
   ]'
@@ -198,10 +208,11 @@ require 'net/http'
 auth_key = 'mykey'
 auth_secret = 'mysecret'
 recipient = '0602030405'
+identifier = '001'
 message = 'Ceci est un exemple%0ATest'
 
 url = URI('https://communication.avis-locataire.com/v1/send_sms')
-url.query = "auth_key=#{auth_key}&auth_secret=#{auth_secret}&recipient=#{recipient}&message=#{message}"
+url.query = "auth_key=#{auth_key}&auth_secret=#{auth_secret}&recipient=#{recipient}&identifier=#{identifier}&message=#{message}"
 
 http = Net::HTTP.new(url.host, url.port)
 request = Net::HTTP::Post.new(url)
@@ -221,10 +232,11 @@ var requestOptions = {
 var auth_key = 'mykey'
 var auth_secret = 'mysecret'
 var recipient = '0602030405'
+var identifier = "001"
 var message = 'Ceci est un exemple%0ATest'
 
 fetch(
-  `${endpoint}?auth_key=${auth_key}&auth_secret=${auth_secret}&recipient=${recipient}&message=${message}`,
+  `${endpoint}?auth_key=${auth_key}&auth_secret=${auth_secret}&recipient=${recipient}&identifier=${identifier}&message=${message}`,
   requestOptions
 ).then(response => response.text())
  .then(result => console.log(result))
@@ -277,6 +289,7 @@ Nom | Description
 auth_key | Clé d'authentification
 auth_secret | Secret d'authentification correspondant à la clé ci-dessus
 recipient | Numéro de téléphone du destinataire
+identifier | Paramètre optionel pour identifier en interne le message/envoi
 message | Contenu du message
 
 ### Paramètres URL de la requête pour un envoi multiple
@@ -291,6 +304,7 @@ Dans le cas d'un envoi multiple, le corps de la requête HTTP doit contenir un t
 Valeur | Description
 --------- | -----------
 recipient | Numéro de téléphone du destinataire
+identifier | Paramètre optionel pour identifier en interne le message/envoi
 message | Contenu du message
 
 <aside class="notice">
@@ -309,7 +323,8 @@ curl -X POST \
   --data "phone=0602030405" \
   --data "email_subject=Email exemple" \
   --data "email_content=Ceci est un example%0ATest" \
-  --data "sms_content=Ceci est un example%0ATest"
+  --data "sms_content=Ceci est un example%0ATest" \
+  --data "identifier=001" \
   --data "channel=both"
 
 # Envoi de plusieurs messages
@@ -323,6 +338,7 @@ curl -X POST \
       "email_subject": "Email exemple",
       "email_content": "Ceci est un exemple%0ATest"
       "sms_content": "Ceci est un example%0ATest",
+      "identifier": "001",
       "channel": "both"
     }, {
       "email": "exemple2@email.com",
@@ -330,6 +346,7 @@ curl -X POST \
       "email_subject": "Email exemple2",
       "email_content": "Ceci est un exemple2%0ATest"
       "sms_content": "Ceci est un example2%0ATest",
+      "identifier": "002",
       "channel": "both"
     }
   ]'
@@ -387,6 +404,7 @@ phone | Numéro de téléphone du destinataire
 email_subject | Sujet de l'email
 email_content | Contenu du message Email
 sms_content | Contenu du message SMS
+identifier | Paramètre optionel pour identifier en interne le message/envoi
 channel | Canal utilisé, peut être `sms`, `email` ou `both`
 
 ### Paramètres URL de la requête pour un envoi multiple
@@ -405,6 +423,7 @@ phone | Numéro de téléphone du destinataire
 email_subject | Sujet de l'email
 email_content | Contenu du message Email
 sms_content | Contenu du message SMS
+identifier | Paramètre optionel pour identifier en interne le message/envoi
 channel | Canal utilisé, peut être `sms`, `email` ou `both`
 
 <aside class="notice">
@@ -421,6 +440,7 @@ curl -X GET \
   --data "with_error=true" \
   --data "limit=1" \
   --data "offset=0" \
+  --data "identifier=001" \
   --data "from=2020-01-01T14:00:00Z" \
   --data "from=2020-01-31T14:00:00Z"
 ```
@@ -439,6 +459,7 @@ curl -X GET \
       "email_subject": "Email exemple",
       "email_content": "Ceci est un example%0ATest",
       "sms_content": "Ceci est un example%0ATest",
+      "identifier": "001",
       "has_error": false,
       "error_message": null,
       "created_at": "2020-01-18T15:31:12Z"
@@ -462,6 +483,7 @@ auth_secret | Secret d'authentification correspondant à la clé ci-dessus.
 with_error | Récupérer uniquement les messages avec `true` ou sans `false` erreurs
 limit | Nombre maximum de messages retourné.
 offset | Ignore les `N` premiers messages.
+identifier | Limite aux messages avec le même identitfiant
 from | Retourne les messages après la date spécifié au format ISO8601.
 until | Retourne les messages avant la date spécifié au format ISO8601.
 
