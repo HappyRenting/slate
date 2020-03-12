@@ -405,7 +405,7 @@ email_subject | Sujet de l'email
 email_content | Contenu du message Email
 sms_content | Contenu du message SMS
 identifier | Paramètre optionel pour identifier en interne le message/envoi
-channel | Canal utilisé, peut être `sms`, `email` ou `both`
+channel | Canal utilisé, peut être `sms`, `email`, `both`, `sms_first` ou `email_first`
 
 ### Paramètres URL de la requête pour un envoi multiple
 
@@ -424,7 +424,7 @@ email_subject | Sujet de l'email
 email_content | Contenu du message Email
 sms_content | Contenu du message SMS
 identifier | Paramètre optionel pour identifier en interne le message/envoi
-channel | Canal utilisé, peut être `sms`, `email` ou `both`
+channel | Canal utilisé, peut être `sms`, `email`, `both`, `sms_first` ou `email_first`
 
 <aside class="notice">
 Note - Les messages sont envoyés de manière asynchrone
@@ -486,6 +486,18 @@ offset | Ignore les `N` premiers messages.
 identifier | Limite aux messages avec le même identitfiant
 from | Retourne les messages après la date spécifié au format ISO8601.
 until | Retourne les messages avant la date spécifié au format ISO8601.
+
+## Informations supplémentaires
+
+Détail sur le champ `channel` :
+
+Valeur | Action
+--------- | -----------
+sms | Envoi le message uniquement par SMS (numéro valide requis)
+email | Envoi le message uniquement par email (adresse email valide requis)
+both | Envoi le message par SMS et email
+sms_first | Envoi le message par SMS si le numéro est présent sinon envoi par email
+email_first | Envoi le message par email si l'adresse email est présente sinon envoi par SMS
 
 # Codes d'erreurs
 
