@@ -241,6 +241,9 @@
                   <li>
                     <a href="#liste-des-messages" class="toc-h2 toc-link" data-title="Liste des messages">Liste des messages</a>
                   </li>
+                  <li>
+                    <a href="#informations-supplementaires" class="toc-h2 toc-link" data-title="Informations supplémentaires">Informations supplémentaires</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -720,7 +723,7 @@ curl -X POST <span class="se">\</span>
 </tr>
 <tr>
 <td>channel</td>
-<td>Canal utilisé, peut être <code>sms</code>, <code>email</code> ou <code>both</code></td>
+<td>Canal utilisé, peut être <code>sms</code>, <code>email</code>, <code>both</code>, <code>sms_first</code> ou <code>email_first</code></td>
 </tr>
 </tbody></table>
 <h3 id='parametres-url-de-la-requete-pour-un-envoi-multiple-3'>Paramètres URL de la requête pour un envoi multiple</h3>
@@ -774,7 +777,7 @@ curl -X POST <span class="se">\</span>
 </tr>
 <tr>
 <td>channel</td>
-<td>Canal utilisé, peut être <code>sms</code>, <code>email</code> ou <code>both</code></td>
+<td>Canal utilisé, peut être <code>sms</code>, <code>email</code>, <code>both</code>, <code>sms_first</code> ou <code>email_first</code></td>
 </tr>
 </tbody></table>
 
@@ -855,6 +858,36 @@ Note - Les messages sont envoyés de manière asynchrone
 <tr>
 <td>until</td>
 <td>Retourne les messages avant la date spécifié au format ISO8601.</td>
+</tr>
+</tbody></table>
+<h2 id='informations-supplementaires'>Informations supplémentaires</h2>
+<p>Détail sur le champ <code>channel</code> :</p>
+
+<table><thead>
+<tr>
+<th>Valeur</th>
+<th>Action</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sms</td>
+<td>Envoi le message uniquement par SMS (numéro valide requis)</td>
+</tr>
+<tr>
+<td>email</td>
+<td>Envoi le message uniquement par email (adresse email valide requis)</td>
+</tr>
+<tr>
+<td>both</td>
+<td>Envoi le message par SMS et email</td>
+</tr>
+<tr>
+<td>sms_first</td>
+<td>Envoi le message par SMS si le numéro est présent sinon envoi par email</td>
+</tr>
+<tr>
+<td>email_first</td>
+<td>Envoi le message par email si l&#39;adresse email est présente sinon envoi par SMS</td>
 </tr>
 </tbody></table>
 <h1 id='codes-d-39-erreurs'>Codes d&#39;erreurs</h1>
