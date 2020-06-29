@@ -271,6 +271,8 @@ curl -X POST <span class="se">\</span>
   --data <span class="s2">"recipient=exemple@mail.com"</span> <span class="se">\</span>
   --data <span class="s2">"subject=Email exemple"</span> <span class="se">\</span>
   --data <span class="s2">"identifier=001"</span>
+  --data <span class="s2">"force_sending=false"</span>
+  --data <span class="s2">"unsubscribe_link=true"</span>
   --data <span class="s2">"message=Ceci est un exemple%0ATest"</span>
 
 <span class="c"># Envoi de plusieurs emails</span>
@@ -282,11 +284,14 @@ curl -X POST <span class="se">\</span>
       "recipient": "exemple@mail.com",
       "subject": "Email exemple",
       "identifier": "001",
+      "force_sending": true,
       "message": "Ceci est un exemple%0ATest"
     }, {
       "recipient": "exemple2@mail.com",
       "subject": "Email exemple2",
       "identifier": "002",
+      "force_sending": false,
+      "unsubscribe_link": true,
       "message": "Ceci est un exemple2%0ATest"
     }
   ]'</span>
@@ -392,6 +397,14 @@ curl -X POST <span class="se">\</span>
 <td>Paramètre optionel pour identifier en interne le message/envoi</td>
 </tr>
 <tr>
+<td>force_sending</td>
+<td>Forcer l&#39;envoie même si le destinataire est désinscrit (optionnel)</td>
+</tr>
+<tr>
+<td>unsubscribe_link</td>
+<td>Paramètre optionel qui détermine si le liens de désincription doit être visible</td>
+</tr>
+<tr>
 <td>message</td>
 <td>Contenu du message</td>
 </tr>
@@ -432,6 +445,14 @@ curl -X POST <span class="se">\</span>
 <tr>
 <td>identifier</td>
 <td>Paramètre optionel pour identifier en interne le message/envoi</td>
+</tr>
+<tr>
+<td>force_sending</td>
+<td>Forcer l&#39;envoie même si le destinataire est désinscrit (optionnel)</td>
+</tr>
+<tr>
+<td>unsubscribe_link</td>
+<td>Paramètre optionel qui détermine si le liens de désincription doit être visible</td>
 </tr>
 <tr>
 <td>message</td>
@@ -562,6 +583,10 @@ curl -X POST <span class="se">\</span>
 <td>Paramètre optionel pour identifier en interne le message/envoi</td>
 </tr>
 <tr>
+<td>force_sending</td>
+<td>Forcer l&#39;envoie même si le destinataire est désinscrit (optionnel)</td>
+</tr>
+<tr>
 <td>message</td>
 <td>Contenu du message</td>
 </tr>
@@ -598,6 +623,10 @@ curl -X POST <span class="se">\</span>
 <tr>
 <td>identifier</td>
 <td>Paramètre optionel pour identifier en interne le message/envoi</td>
+</tr>
+<tr>
+<td>force_sending</td>
+<td>Forcer l&#39;envoie même si le destinataire est désinscrit (optionnel)</td>
 </tr>
 <tr>
 <td>message</td>
@@ -722,6 +751,14 @@ curl -X POST <span class="se">\</span>
 <td>Paramètre optionel pour identifier en interne le message/envoi</td>
 </tr>
 <tr>
+<td>force_sending</td>
+<td>Forcer l&#39;envoie même si le destinataire est désinscrit (optionnel)</td>
+</tr>
+<tr>
+<td>unsubscribe_link</td>
+<td>Paramètre optionel qui détermine si le liens de désincription doit être visible</td>
+</tr>
+<tr>
 <td>channel</td>
 <td>Canal utilisé, peut être <code>sms</code>, <code>email</code>, <code>both</code>, <code>sms_first</code> ou <code>email_first</code></td>
 </tr>
@@ -774,6 +811,14 @@ curl -X POST <span class="se">\</span>
 <tr>
 <td>identifier</td>
 <td>Paramètre optionel pour identifier en interne le message/envoi</td>
+</tr>
+<tr>
+<td>force_sending</td>
+<td>Forcer l&#39;envoie même si le destinataire est désinscrit (optionnel)</td>
+</tr>
+<tr>
+<td>unsubscribe_link</td>
+<td>Paramètre optionel qui détermine si le liens de désincription doit être visible</td>
 </tr>
 <tr>
 <td>channel</td>
