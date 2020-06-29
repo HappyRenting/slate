@@ -35,6 +35,8 @@ curl -X POST \
   --data "recipient=exemple@mail.com" \
   --data "subject=Email exemple" \
   --data "identifier=001"
+  --data "force_sending=false"
+  --data "unsubscribe_link=true"
   --data "message=Ceci est un exemple%0ATest"
 
 # Envoi de plusieurs emails
@@ -46,11 +48,14 @@ curl -X POST \
       "recipient": "exemple@mail.com",
       "subject": "Email exemple",
       "identifier": "001",
+      "force_sending": true,
       "message": "Ceci est un exemple%0ATest"
     }, {
       "recipient": "exemple2@mail.com",
       "subject": "Email exemple2",
       "identifier": "002",
+      "force_sending": false,
+      "unsubscribe_link": true,
       "message": "Ceci est un exemple2%0ATest"
     }
   ]'
@@ -148,6 +153,8 @@ auth_secret | Secret d'authentification correspondant à la clé ci-dessus
 recipient | Email du destinataire
 subject | Sujet de l'email
 identifier | Paramètre optionel pour identifier en interne le message/envoi
+force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
+unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 message | Contenu du message
 
 
@@ -165,6 +172,8 @@ Valeur | Description
 recipient | Email du destinataire
 subject | Sujet de l'email
 identifier | Paramètre optionel pour identifier en interne le message/envoi
+force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
+unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 message | Contenu du message
 
 
@@ -290,6 +299,7 @@ auth_key | Clé d'authentification
 auth_secret | Secret d'authentification correspondant à la clé ci-dessus
 recipient | Numéro de téléphone du destinataire
 identifier | Paramètre optionel pour identifier en interne le message/envoi
+force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 message | Contenu du message
 
 ### Paramètres URL de la requête pour un envoi multiple
@@ -305,6 +315,7 @@ Valeur | Description
 --------- | -----------
 recipient | Numéro de téléphone du destinataire
 identifier | Paramètre optionel pour identifier en interne le message/envoi
+force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 message | Contenu du message
 
 <aside class="notice">
@@ -405,6 +416,8 @@ email_subject | Sujet de l'email
 email_content | Contenu du message Email
 sms_content | Contenu du message SMS
 identifier | Paramètre optionel pour identifier en interne le message/envoi
+force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
+unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 channel | Canal utilisé, peut être `sms`, `email`, `both`, `sms_first` ou `email_first`
 
 ### Paramètres URL de la requête pour un envoi multiple
@@ -424,6 +437,8 @@ email_subject | Sujet de l'email
 email_content | Contenu du message Email
 sms_content | Contenu du message SMS
 identifier | Paramètre optionel pour identifier en interne le message/envoi
+force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
+unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 channel | Canal utilisé, peut être `sms`, `email`, `both`, `sms_first` ou `email_first`
 
 <aside class="notice">
