@@ -34,9 +34,9 @@ curl -X POST \
   --data "auth_secret=mysecret" \
   --data "recipient=exemple@mail.com" \
   --data "subject=Email exemple" \
-  --data "identifier=001"
-  --data "force_sending=false"
-  --data "unsubscribe_link=true"
+  --data "identifier=001" \
+  --data "force_sending=false" \
+  --data "unsubscribe_link=true" \
   --data "message=Ceci est un exemple%0ATest"
 
 # Envoi de plusieurs emails
@@ -65,15 +65,19 @@ curl -X POST \
 require 'uri'
 require 'net/http'
 
-auth_key = 'mykey'
-auth_secret = 'mysecret'
-recipient = 'exemple@mail.com'
-subject = 'Email exemple'
-identifier = '001'
-message = 'Ceci est un exemple%0ATest'
+params = {
+  auth_key: 'mykey',
+  auth_secret: 'mysecret',
+  recipient: 'exemple@mail.com',
+  subject: 'Email exemple',
+  identifier: '001',
+  force_sending: false,
+  unsubscribe_link: true,
+  message: 'Ceci est un exemple%0ATest'
+}
 
 url = URI('https://communication.avis-locataire.com/v1/send_email')
-url.query = "auth_key=#{auth_key}&auth_secret=#{auth_secret}&recipient=#{recipient}&subject=#{subject}&identifier=#{identifier}&message=#{message}"
+url.query = params.map { |key, value| "#{key}=#{value}" }.join('&')
 
 http = Net::HTTP.new(url.host, url.port)
 request = Net::HTTP::Post.new(url)
@@ -90,19 +94,26 @@ var requestOptions = {
   redirect: 'follow'
 }
 
-var auth_key = 'mykey'
-var auth_secret = 'mysecret'
-var recipient = 'exemple@mail.com'
-var subject = 'Email exemple'
-var identifier = "001"
-var message = 'Ceci est un exemple%0ATest'
+params = {
+  auth_key: 'mykey',
+  auth_secret: 'mysecret',
+  recipient: 'exemple@mail.com',
+  subject: 'Email exemple',
+  identifier: "001",
+  force_sending: false,
+  unsubscribe_link: true,
+  message: 'Ceci est un exemple%0ATest'
+}
 
-fetch(
-  `${endpoint}?auth_key=${auth_key}&auth_secret=${auth_secret}&recipient=${recipient}&subject=${subject}&identifier=${identifier}&message=${message}`,
-  requestOptions
-).then(response => response.text())
- .then(result => console.log(result))
- .catch(error => console.log('error', error))
+queryParams = []
+for (const [key, value] of Object.entries(params)) {
+  queryParams.push(`${key}=${value}`)
+}
+
+fetch(`${endpoint}?${queryParams.join('&')}`, requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error))
 ```
 
 > Les commandes ci-dessus renvoient un JSON structuré comme ceci
@@ -190,7 +201,8 @@ curl -X POST \
   --data "auth_key=mykey" \
   --data "auth_secret=mysecret" \
   --data "recipient=0602030405" \
-  --data "identifier=001"
+  --data "identifier=001" \
+  --data "force_sending=false" \
   --data "message=Ceci est un example%0ATest"
 
 # Envoi de plusieurs SMS
@@ -201,10 +213,12 @@ curl -X POST \
     {
       "recipient": "0602030405",
       "identifier": "001",
+      "force_sending": true,
       "message": "Ceci est un exemple%0ATest"
     }, {
       "recipient": "0702030405",
       "identifier": "002",
+      "force_sending": false,
       "message": "Ceci est un exemple2%0ATest"
     }
   ]'
@@ -214,14 +228,17 @@ curl -X POST \
 require 'uri'
 require 'net/http'
 
-auth_key = 'mykey'
-auth_secret = 'mysecret'
-recipient = '0602030405'
-identifier = '001'
-message = 'Ceci est un exemple%0ATest'
+params = {
+  auth_key: 'mykey',
+  auth_secret: 'mysecret',
+  recipient: '0602030405',
+  identifier: '001',
+  force_sending: false,
+  message: 'Ceci est un exemple%0ATest'
+}
 
 url = URI('https://communication.avis-locataire.com/v1/send_sms')
-url.query = "auth_key=#{auth_key}&auth_secret=#{auth_secret}&recipient=#{recipient}&identifier=#{identifier}&message=#{message}"
+url.query = params.map { |key, value| "#{key}=#{value}" }.join('&')
 
 http = Net::HTTP.new(url.host, url.port)
 request = Net::HTTP::Post.new(url)
@@ -238,18 +255,24 @@ var requestOptions = {
   redirect: 'follow'
 }
 
-var auth_key = 'mykey'
-var auth_secret = 'mysecret'
-var recipient = '0602030405'
-var identifier = "001"
-var message = 'Ceci est un exemple%0ATest'
+params = {
+  auth_key: 'mykey',
+  auth_secret: 'mysecret',
+  recipient: '0602030405',
+  identifier: "001",
+  force_sending: false,
+  message: 'Ceci est un exemple%0ATest'
+}
 
-fetch(
-  `${endpoint}?auth_key=${auth_key}&auth_secret=${auth_secret}&recipient=${recipient}&identifier=${identifier}&message=${message}`,
-  requestOptions
-).then(response => response.text())
- .then(result => console.log(result))
- .catch(error => console.log('error', error))
+queryParams = []
+for (const [key, value] of Object.entries(params)) {
+  queryParams.push(`${key}=${value}`)
+}
+
+fetch(`${endpoint}?${queryParams.join('&')}`, requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error))
 ```
 
 > Les commandes ci-dessus renvoient un JSON structuré comme ceci
@@ -336,6 +359,8 @@ curl -X POST \
   --data "email_content=Ceci est un example%0ATest" \
   --data "sms_content=Ceci est un example%0ATest" \
   --data "identifier=001" \
+  --data "force_sending=false" \
+  --data "unsubscribe_link=true" \
   --data "channel=both"
 
 # Envoi de plusieurs messages
@@ -350,6 +375,7 @@ curl -X POST \
       "email_content": "Ceci est un exemple%0ATest"
       "sms_content": "Ceci est un example%0ATest",
       "identifier": "001",
+      "force_sending": true,
       "channel": "both"
     }, {
       "email": "exemple2@email.com",
@@ -358,6 +384,8 @@ curl -X POST \
       "email_content": "Ceci est un exemple2%0ATest"
       "sms_content": "Ceci est un example2%0ATest",
       "identifier": "002",
+      "force_sending": false,
+      "unsubscribe_link": true,
       "channel": "both"
     }
   ]'
