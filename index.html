@@ -270,9 +270,9 @@ curl -X POST <span class="se">\</span>
   --data <span class="s2">"auth_secret=mysecret"</span> <span class="se">\</span>
   --data <span class="s2">"recipient=exemple@mail.com"</span> <span class="se">\</span>
   --data <span class="s2">"subject=Email exemple"</span> <span class="se">\</span>
-  --data <span class="s2">"identifier=001"</span>
-  --data <span class="s2">"force_sending=false"</span>
-  --data <span class="s2">"unsubscribe_link=true"</span>
+  --data <span class="s2">"identifier=001"</span> <span class="se">\</span>
+  --data <span class="s2">"force_sending=false"</span> <span class="se">\</span>
+  --data <span class="s2">"unsubscribe_link=true"</span> <span class="se">\</span>
   --data <span class="s2">"message=Ceci est un exemple%0ATest"</span>
 
 <span class="c"># Envoi de plusieurs emails</span>
@@ -298,15 +298,19 @@ curl -X POST <span class="se">\</span>
 </code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
 <span class="nb">require</span> <span class="s1">'net/http'</span>
 
-<span class="n">auth_key</span> <span class="o">=</span> <span class="s1">'mykey'</span>
-<span class="n">auth_secret</span> <span class="o">=</span> <span class="s1">'mysecret'</span>
-<span class="n">recipient</span> <span class="o">=</span> <span class="s1">'exemple@mail.com'</span>
-<span class="n">subject</span> <span class="o">=</span> <span class="s1">'Email exemple'</span>
-<span class="n">identifier</span> <span class="o">=</span> <span class="s1">'001'</span>
-<span class="n">message</span> <span class="o">=</span> <span class="s1">'Ceci est un exemple%0ATest'</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">auth_key: </span><span class="s1">'mykey'</span><span class="p">,</span>
+  <span class="ss">auth_secret: </span><span class="s1">'mysecret'</span><span class="p">,</span>
+  <span class="ss">recipient: </span><span class="s1">'exemple@mail.com'</span><span class="p">,</span>
+  <span class="ss">subject: </span><span class="s1">'Email exemple'</span><span class="p">,</span>
+  <span class="ss">identifier: </span><span class="s1">'001'</span><span class="p">,</span>
+  <span class="ss">force_sending: </span><span class="kp">false</span><span class="p">,</span>
+  <span class="ss">unsubscribe_link: </span><span class="kp">true</span><span class="p">,</span>
+  <span class="ss">message: </span><span class="s1">'Ceci est un exemple%0ATest'</span>
+<span class="p">}</span>
 
 <span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s1">'https://communication.avis-locataire.com/v1/send_email'</span><span class="p">)</span>
-<span class="n">url</span><span class="p">.</span><span class="nf">query</span> <span class="o">=</span> <span class="s2">"auth_key=</span><span class="si">#{</span><span class="n">auth_key</span><span class="si">}</span><span class="s2">&amp;auth_secret=</span><span class="si">#{</span><span class="n">auth_secret</span><span class="si">}</span><span class="s2">&amp;recipient=</span><span class="si">#{</span><span class="n">recipient</span><span class="si">}</span><span class="s2">&amp;subject=</span><span class="si">#{</span><span class="n">subject</span><span class="si">}</span><span class="s2">&amp;identifier=</span><span class="si">#{</span><span class="n">identifier</span><span class="si">}</span><span class="s2">&amp;message=</span><span class="si">#{</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span>
+<span class="n">url</span><span class="p">.</span><span class="nf">query</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="nf">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">|</span> <span class="s2">"</span><span class="si">#{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">#{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span> <span class="p">}.</span><span class="nf">join</span><span class="p">(</span><span class="s1">'&amp;'</span><span class="p">)</span>
 
 <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
@@ -320,19 +324,26 @@ curl -X POST <span class="se">\</span>
   <span class="na">redirect</span><span class="p">:</span> <span class="s1">'follow'</span>
 <span class="p">}</span>
 
-<span class="kd">var</span> <span class="nx">auth_key</span> <span class="o">=</span> <span class="s1">'mykey'</span>
-<span class="kd">var</span> <span class="nx">auth_secret</span> <span class="o">=</span> <span class="s1">'mysecret'</span>
-<span class="kd">var</span> <span class="nx">recipient</span> <span class="o">=</span> <span class="s1">'exemple@mail.com'</span>
-<span class="kd">var</span> <span class="nx">subject</span> <span class="o">=</span> <span class="s1">'Email exemple'</span>
-<span class="kd">var</span> <span class="nx">identifier</span> <span class="o">=</span> <span class="s2">"001"</span>
-<span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s1">'Ceci est un exemple%0ATest'</span>
+<span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">auth_key</span><span class="p">:</span> <span class="s1">'mykey'</span><span class="p">,</span>
+  <span class="na">auth_secret</span><span class="p">:</span> <span class="s1">'mysecret'</span><span class="p">,</span>
+  <span class="na">recipient</span><span class="p">:</span> <span class="s1">'exemple@mail.com'</span><span class="p">,</span>
+  <span class="na">subject</span><span class="p">:</span> <span class="s1">'Email exemple'</span><span class="p">,</span>
+  <span class="na">identifier</span><span class="p">:</span> <span class="s2">"001"</span><span class="p">,</span>
+  <span class="na">force_sending</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="na">unsubscribe_link</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">message</span><span class="p">:</span> <span class="s1">'Ceci est un exemple%0ATest'</span>
+<span class="p">}</span>
 
-<span class="nx">fetch</span><span class="p">(</span>
-  <span class="s2">`</span><span class="p">${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">?auth_key=</span><span class="p">${</span><span class="nx">auth_key</span><span class="p">}</span><span class="s2">&amp;auth_secret=</span><span class="p">${</span><span class="nx">auth_secret</span><span class="p">}</span><span class="s2">&amp;recipient=</span><span class="p">${</span><span class="nx">recipient</span><span class="p">}</span><span class="s2">&amp;subject=</span><span class="p">${</span><span class="nx">subject</span><span class="p">}</span><span class="s2">&amp;identifier=</span><span class="p">${</span><span class="nx">identifier</span><span class="p">}</span><span class="s2">&amp;message=</span><span class="p">${</span><span class="nx">message</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span>
-  <span class="nx">requestOptions</span>
-<span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">())</span>
- <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
- <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="nx">error</span><span class="p">))</span>
+<span class="nx">queryParams</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="p">[</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">]</span> <span class="nx">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">params</span><span class="p">))</span> <span class="p">{</span>
+  <span class="nx">queryParams</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2">=</span><span class="p">${</span><span class="nx">value</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">fetch</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">?</span><span class="p">${</span><span class="nx">queryParams</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">'&amp;'</span><span class="p">)}</span><span class="s2">`</span><span class="p">,</span> <span class="nx">requestOptions</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="nx">error</span><span class="p">))</span>
 </code></pre>
 <blockquote>
 <p>Les commandes ci-dessus renvoient un JSON structuré comme ceci</p>
@@ -469,7 +480,8 @@ curl -X POST <span class="se">\</span>
   --data <span class="s2">"auth_key=mykey"</span> <span class="se">\</span>
   --data <span class="s2">"auth_secret=mysecret"</span> <span class="se">\</span>
   --data <span class="s2">"recipient=0602030405"</span> <span class="se">\</span>
-  --data <span class="s2">"identifier=001"</span>
+  --data <span class="s2">"identifier=001"</span> <span class="se">\</span>
+  --data <span class="s2">"force_sending=false"</span> <span class="se">\</span>
   --data <span class="s2">"message=Ceci est un example%0ATest"</span>
 
 <span class="c"># Envoi de plusieurs SMS</span>
@@ -480,24 +492,29 @@ curl -X POST <span class="se">\</span>
     {
       "recipient": "0602030405",
       "identifier": "001",
+      "force_sending": true,
       "message": "Ceci est un exemple%0ATest"
     }, {
       "recipient": "0702030405",
       "identifier": "002",
+      "force_sending": false,
       "message": "Ceci est un exemple2%0ATest"
     }
   ]'</span>
 </code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
 <span class="nb">require</span> <span class="s1">'net/http'</span>
 
-<span class="n">auth_key</span> <span class="o">=</span> <span class="s1">'mykey'</span>
-<span class="n">auth_secret</span> <span class="o">=</span> <span class="s1">'mysecret'</span>
-<span class="n">recipient</span> <span class="o">=</span> <span class="s1">'0602030405'</span>
-<span class="n">identifier</span> <span class="o">=</span> <span class="s1">'001'</span>
-<span class="n">message</span> <span class="o">=</span> <span class="s1">'Ceci est un exemple%0ATest'</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">auth_key: </span><span class="s1">'mykey'</span><span class="p">,</span>
+  <span class="ss">auth_secret: </span><span class="s1">'mysecret'</span><span class="p">,</span>
+  <span class="ss">recipient: </span><span class="s1">'0602030405'</span><span class="p">,</span>
+  <span class="ss">identifier: </span><span class="s1">'001'</span><span class="p">,</span>
+  <span class="ss">force_sending: </span><span class="kp">false</span><span class="p">,</span>
+  <span class="ss">message: </span><span class="s1">'Ceci est un exemple%0ATest'</span>
+<span class="p">}</span>
 
 <span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s1">'https://communication.avis-locataire.com/v1/send_sms'</span><span class="p">)</span>
-<span class="n">url</span><span class="p">.</span><span class="nf">query</span> <span class="o">=</span> <span class="s2">"auth_key=</span><span class="si">#{</span><span class="n">auth_key</span><span class="si">}</span><span class="s2">&amp;auth_secret=</span><span class="si">#{</span><span class="n">auth_secret</span><span class="si">}</span><span class="s2">&amp;recipient=</span><span class="si">#{</span><span class="n">recipient</span><span class="si">}</span><span class="s2">&amp;identifier=</span><span class="si">#{</span><span class="n">identifier</span><span class="si">}</span><span class="s2">&amp;message=</span><span class="si">#{</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span>
+<span class="n">url</span><span class="p">.</span><span class="nf">query</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="nf">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">|</span> <span class="s2">"</span><span class="si">#{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">#{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span> <span class="p">}.</span><span class="nf">join</span><span class="p">(</span><span class="s1">'&amp;'</span><span class="p">)</span>
 
 <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
@@ -511,18 +528,24 @@ curl -X POST <span class="se">\</span>
   <span class="na">redirect</span><span class="p">:</span> <span class="s1">'follow'</span>
 <span class="p">}</span>
 
-<span class="kd">var</span> <span class="nx">auth_key</span> <span class="o">=</span> <span class="s1">'mykey'</span>
-<span class="kd">var</span> <span class="nx">auth_secret</span> <span class="o">=</span> <span class="s1">'mysecret'</span>
-<span class="kd">var</span> <span class="nx">recipient</span> <span class="o">=</span> <span class="s1">'0602030405'</span>
-<span class="kd">var</span> <span class="nx">identifier</span> <span class="o">=</span> <span class="s2">"001"</span>
-<span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s1">'Ceci est un exemple%0ATest'</span>
+<span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">auth_key</span><span class="p">:</span> <span class="s1">'mykey'</span><span class="p">,</span>
+  <span class="na">auth_secret</span><span class="p">:</span> <span class="s1">'mysecret'</span><span class="p">,</span>
+  <span class="na">recipient</span><span class="p">:</span> <span class="s1">'0602030405'</span><span class="p">,</span>
+  <span class="na">identifier</span><span class="p">:</span> <span class="s2">"001"</span><span class="p">,</span>
+  <span class="na">force_sending</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="na">message</span><span class="p">:</span> <span class="s1">'Ceci est un exemple%0ATest'</span>
+<span class="p">}</span>
 
-<span class="nx">fetch</span><span class="p">(</span>
-  <span class="s2">`</span><span class="p">${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">?auth_key=</span><span class="p">${</span><span class="nx">auth_key</span><span class="p">}</span><span class="s2">&amp;auth_secret=</span><span class="p">${</span><span class="nx">auth_secret</span><span class="p">}</span><span class="s2">&amp;recipient=</span><span class="p">${</span><span class="nx">recipient</span><span class="p">}</span><span class="s2">&amp;identifier=</span><span class="p">${</span><span class="nx">identifier</span><span class="p">}</span><span class="s2">&amp;message=</span><span class="p">${</span><span class="nx">message</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span>
-  <span class="nx">requestOptions</span>
-<span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">())</span>
- <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
- <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="nx">error</span><span class="p">))</span>
+<span class="nx">queryParams</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="p">[</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">]</span> <span class="nx">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">params</span><span class="p">))</span> <span class="p">{</span>
+  <span class="nx">queryParams</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2">=</span><span class="p">${</span><span class="nx">value</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">fetch</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">?</span><span class="p">${</span><span class="nx">queryParams</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">'&amp;'</span><span class="p">)}</span><span class="s2">`</span><span class="p">,</span> <span class="nx">requestOptions</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="nx">error</span><span class="p">))</span>
 </code></pre>
 <blockquote>
 <p>Les commandes ci-dessus renvoient un JSON structuré comme ceci</p>
@@ -648,6 +671,8 @@ curl -X POST <span class="se">\</span>
   --data <span class="s2">"email_content=Ceci est un example%0ATest"</span> <span class="se">\</span>
   --data <span class="s2">"sms_content=Ceci est un example%0ATest"</span> <span class="se">\</span>
   --data <span class="s2">"identifier=001"</span> <span class="se">\</span>
+  --data <span class="s2">"force_sending=false"</span> <span class="se">\</span>
+  --data <span class="s2">"unsubscribe_link=true"</span> <span class="se">\</span>
   --data <span class="s2">"channel=both"</span>
 
 <span class="c"># Envoi de plusieurs messages</span>
@@ -662,6 +687,7 @@ curl -X POST <span class="se">\</span>
       "email_content": "Ceci est un exemple%0ATest"
       "sms_content": "Ceci est un example%0ATest",
       "identifier": "001",
+      "force_sending": true,
       "channel": "both"
     }, {
       "email": "exemple2@email.com",
@@ -670,6 +696,8 @@ curl -X POST <span class="se">\</span>
       "email_content": "Ceci est un exemple2%0ATest"
       "sms_content": "Ceci est un example2%0ATest",
       "identifier": "002",
+      "force_sending": false,
+      "unsubscribe_link": true,
       "channel": "both"
     }
   ]'</span>
