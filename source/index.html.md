@@ -530,6 +530,47 @@ identifier | Limite aux messages avec le même identitfiant
 from | Retourne les messages après la date spécifié au format ISO8601.
 until | Retourne les messages avant la date spécifié au format ISO8601.
 
+## Statut globale des messages
+
+```shell
+# Récupération du statut
+curl -X POST \
+  "https://communication.avis-locataire.com/v1/messages_status" \
+  --data "auth_key=mykey" \
+  --data "auth_secret=mysecret" \
+  --data "identifier=001"
+```
+
+> La commande ci-dessus renvoie un JSON structuré comme ceci
+
+```js
+// Exemple de réussite
+{
+  "status": 200,
+  "all_sent": true
+}
+
+// Exemple d'échec
+{
+  "status": 400,
+  "message": "invalid identifier"
+}
+```
+
+Cette requête permet de récupérer le statut global des messages filtré par l'`identifier`.
+
+### Requête HTTP
+
+`GET https://communication.avis-locataire.com/v1/messages_status`
+
+### Paramètres de la requête pour un envoi unique
+
+Nom | Description
+--------- | -----------
+auth_key | Clé d'authentification
+auth_secret | Secret d'authentification correspondant à la clé ci-dessus
+identifier | Paramètre pour filtrer en interne le message/envoi
+
 ## Informations supplémentaires
 
 Détail sur le champ `channel` :
