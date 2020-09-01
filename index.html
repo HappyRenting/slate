@@ -242,6 +242,9 @@
                     <a href="#liste-des-messages" class="toc-h2 toc-link" data-title="Liste des messages">Liste des messages</a>
                   </li>
                   <li>
+                    <a href="#statut-globale-des-messages" class="toc-h2 toc-link" data-title="Statut globale des messages">Statut globale des messages</a>
+                  </li>
+                  <li>
                     <a href="#informations-supplementaires" class="toc-h2 toc-link" data-title="Informations supplémentaires">Informations supplémentaires</a>
                   </li>
               </ul>
@@ -931,6 +934,51 @@ Note - Les messages sont envoyés de manière asynchrone
 <tr>
 <td>until</td>
 <td>Retourne les messages avant la date spécifié au format ISO8601.</td>
+</tr>
+</tbody></table>
+<h2 id='statut-globale-des-messages'>Statut globale des messages</h2><pre class="highlight shell tab-shell"><code><span class="c"># Récupération du statut</span>
+curl -X POST <span class="se">\</span>
+  <span class="s2">"https://communication.avis-locataire.com/v1/messages_status"</span> <span class="se">\</span>
+  --data <span class="s2">"auth_key=mykey"</span> <span class="se">\</span>
+  --data <span class="s2">"auth_secret=mysecret"</span> <span class="se">\</span>
+  --data <span class="s2">"identifier=001"</span>
+</code></pre>
+<blockquote>
+<p>La commande ci-dessus renvoie un JSON structuré comme ceci</p>
+</blockquote>
+<pre class="highlight javascript"><code><span class="c1">// Exemple de réussite</span>
+<span class="p">{</span>
+  <span class="s2">"status"</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+  <span class="s2">"all_sent"</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+
+<span class="c1">// Exemple d'échec</span>
+<span class="p">{</span>
+  <span class="s2">"status"</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span>
+  <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"invalid identifier"</span>
+<span class="p">}</span>
+</code></pre>
+<p>Cette requête permet de récupérer le statut global des messages filtré par l&#39;<code>identifier</code>.</p>
+<h3 id='requete-http-5'>Requête HTTP</h3>
+<p><code>GET https://communication.avis-locataire.com/v1/messages_status</code></p>
+<h3 id='parametres-de-la-requete-pour-un-envoi-unique-3'>Paramètres de la requête pour un envoi unique</h3>
+<table><thead>
+<tr>
+<th>Nom</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>auth_key</td>
+<td>Clé d&#39;authentification</td>
+</tr>
+<tr>
+<td>auth_secret</td>
+<td>Secret d&#39;authentification correspondant à la clé ci-dessus</td>
+</tr>
+<tr>
+<td>identifier</td>
+<td>Paramètre pour filtrer en interne le message/envoi</td>
 </tr>
 </tbody></table>
 <h2 id='informations-supplementaires'>Informations supplémentaires</h2>
