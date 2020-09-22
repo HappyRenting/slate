@@ -37,7 +37,8 @@ curl -X POST \
   --data "identifier=001" \
   --data "force_sending=false" \
   --data "unsubscribe_link=true" \
-  --data "message=Ceci est un exemple%0ATest"
+  --data "message=Ceci est un exemple%0ATest"\
+  --data "test_mode=false"
 
 # Envoi de plusieurs emails
 curl -X POST \
@@ -167,6 +168,7 @@ identifier | Paramètre optionel pour identifier en interne le message/envoi
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 message | Contenu du message
+test_mode | Mode test, n'envoi pas réellement le message (optionnel)
 
 
 ### Paramètres URL de la requête pour un envoi multiple
@@ -186,6 +188,7 @@ identifier | Paramètre optionel pour identifier en interne le message/envoi
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 message | Contenu du message
+test_mode | Mode test, n'envoi pas réellement le message (optionnel)
 
 
 <aside class="notice">
@@ -324,6 +327,7 @@ recipient | Numéro de téléphone du destinataire
 identifier | Paramètre optionel pour identifier en interne le message/envoi
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 message | Contenu du message
+test_mode | Mode test, n'envoi pas réellement le message (optionnel)
 
 ### Paramètres URL de la requête pour un envoi multiple
 
@@ -340,6 +344,7 @@ recipient | Numéro de téléphone du destinataire
 identifier | Paramètre optionel pour identifier en interne le message/envoi
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 message | Contenu du message
+test_mode | Mode test, n'envoi pas réellement le message (optionnel)
 
 <aside class="notice">
 Note - Les SMS sont envoyés de manière asynchrone
@@ -447,6 +452,7 @@ identifier | Paramètre optionel pour identifier en interne le message/envoi
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 channel | Canal utilisé, peut être `sms`, `email`, `both`, `sms_first` ou `email_first`
+test_mode | Mode test, n'envoi pas réellement le message (optionnel)
 
 ### Paramètres URL de la requête pour un envoi multiple
 
@@ -468,6 +474,7 @@ identifier | Paramètre optionel pour identifier en interne le message/envoi
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 channel | Canal utilisé, peut être `sms`, `email`, `both`, `sms_first` ou `email_first`
+test_mode | Mode test, n'envoi pas réellement le message (optionnel)
 
 <aside class="notice">
 Note - Les messages sont envoyés de manière asynchrone
@@ -529,6 +536,7 @@ offset | Ignore les `N` premiers messages.
 identifier | Limite aux messages avec le même identitfiant
 from | Retourne les messages après la date spécifié au format ISO8601.
 until | Retourne les messages avant la date spécifié au format ISO8601.
+test_mode | Filtre les messages selon leur mode (test ou non)
 
 ## Statut globale des messages
 
