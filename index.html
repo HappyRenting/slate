@@ -276,7 +276,8 @@ curl -X POST <span class="se">\</span>
   --data <span class="s2">"identifier=001"</span> <span class="se">\</span>
   --data <span class="s2">"force_sending=false"</span> <span class="se">\</span>
   --data <span class="s2">"unsubscribe_link=true"</span> <span class="se">\</span>
-  --data <span class="s2">"message=Ceci est un exemple%0ATest"</span>
+  --data <span class="s2">"message=Ceci est un exemple%0ATest"</span><span class="se">\</span>
+  --data <span class="s2">"test_mode=false"</span>
 
 <span class="c"># Envoi de plusieurs emails</span>
 curl -X POST <span class="se">\</span>
@@ -422,6 +423,10 @@ curl -X POST <span class="se">\</span>
 <td>message</td>
 <td>Contenu du message</td>
 </tr>
+<tr>
+<td>test_mode</td>
+<td>Mode test, n&#39;envoi pas réellement le message (optionnel)</td>
+</tr>
 </tbody></table>
 <h3 id='parametres-url-de-la-requete-pour-un-envoi-multiple'>Paramètres URL de la requête pour un envoi multiple</h3>
 <table><thead>
@@ -471,6 +476,10 @@ curl -X POST <span class="se">\</span>
 <tr>
 <td>message</td>
 <td>Contenu du message</td>
+</tr>
+<tr>
+<td>test_mode</td>
+<td>Mode test, n&#39;envoi pas réellement le message (optionnel)</td>
 </tr>
 </tbody></table>
 
@@ -616,6 +625,10 @@ curl -X POST <span class="se">\</span>
 <td>message</td>
 <td>Contenu du message</td>
 </tr>
+<tr>
+<td>test_mode</td>
+<td>Mode test, n&#39;envoi pas réellement le message (optionnel)</td>
+</tr>
 </tbody></table>
 <h3 id='parametres-url-de-la-requete-pour-un-envoi-multiple-2'>Paramètres URL de la requête pour un envoi multiple</h3>
 <table><thead>
@@ -657,6 +670,10 @@ curl -X POST <span class="se">\</span>
 <tr>
 <td>message</td>
 <td>Contenu du message</td>
+</tr>
+<tr>
+<td>test_mode</td>
+<td>Mode test, n&#39;envoi pas réellement le message (optionnel)</td>
 </tr>
 </tbody></table>
 
@@ -793,6 +810,10 @@ curl -X POST <span class="se">\</span>
 <td>channel</td>
 <td>Canal utilisé, peut être <code>sms</code>, <code>email</code>, <code>both</code>, <code>sms_first</code> ou <code>email_first</code></td>
 </tr>
+<tr>
+<td>test_mode</td>
+<td>Mode test, n&#39;envoi pas réellement le message (optionnel)</td>
+</tr>
 </tbody></table>
 <h3 id='parametres-url-de-la-requete-pour-un-envoi-multiple-3'>Paramètres URL de la requête pour un envoi multiple</h3>
 <table><thead>
@@ -854,6 +875,10 @@ curl -X POST <span class="se">\</span>
 <tr>
 <td>channel</td>
 <td>Canal utilisé, peut être <code>sms</code>, <code>email</code>, <code>both</code>, <code>sms_first</code> ou <code>email_first</code></td>
+</tr>
+<tr>
+<td>test_mode</td>
+<td>Mode test, n&#39;envoi pas réellement le message (optionnel)</td>
 </tr>
 </tbody></table>
 
@@ -934,6 +959,10 @@ Note - Les messages sont envoyés de manière asynchrone
 <tr>
 <td>until</td>
 <td>Retourne les messages avant la date spécifié au format ISO8601.</td>
+</tr>
+<tr>
+<td>test_mode</td>
+<td>Filtre les messages selon leur mode (test ou non)</td>
 </tr>
 </tbody></table>
 <h2 id='statut-globale-des-messages'>Statut globale des messages</h2><pre class="highlight shell tab-shell"><code><span class="c"># Récupération du statut</span>
