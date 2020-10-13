@@ -34,7 +34,7 @@ curl -X POST \
   --data "auth_secret=mysecret" \
   --data "recipient=exemple@mail.com" \
   --data "subject=Email exemple" \
-  --data "identifier=001" \
+  --data "identifier1=001" \
   --data "force_sending=false" \
   --data "unsubscribe_link=true" \
   --data "message=Ceci est un exemple%0ATest"\
@@ -48,13 +48,13 @@ curl -X POST \
     {
       "recipient": "exemple@mail.com",
       "subject": "Email exemple",
-      "identifier": "001",
+      "identifier1": "001",
       "force_sending": true,
       "message": "Ceci est un exemple%0ATest"
     }, {
       "recipient": "exemple2@mail.com",
       "subject": "Email exemple2",
-      "identifier": "002",
+      "identifier1": "002",
       "force_sending": false,
       "unsubscribe_link": true,
       "message": "Ceci est un exemple2%0ATest"
@@ -71,7 +71,7 @@ params = {
   auth_secret: 'mysecret',
   recipient: 'exemple@mail.com',
   subject: 'Email exemple',
-  identifier: '001',
+  identifier1: '001',
   force_sending: false,
   unsubscribe_link: true,
   message: 'Ceci est un exemple%0ATest'
@@ -100,7 +100,7 @@ params = {
   auth_secret: 'mysecret',
   recipient: 'exemple@mail.com',
   subject: 'Email exemple',
-  identifier: "001",
+  identifier1: "001",
   force_sending: false,
   unsubscribe_link: true,
   message: 'Ceci est un exemple%0ATest'
@@ -164,7 +164,9 @@ auth_key | Clé d'authentification
 auth_secret | Secret d'authentification correspondant à la clé ci-dessus
 recipient | Email du destinataire
 subject | Sujet de l'email
-identifier | Paramètre optionel pour identifier en interne le message/envoi
+identifier(1-2) | Paramètres optionel pour identifier en interne le message/envoi
+email_originator | Paramètre pour changer le nom de l'expediteur dans l'email
+logo_url | Paramètre pour changer le logo afficher dans l'entête de l'email
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 message | Contenu du message
@@ -184,7 +186,9 @@ Valeur | Description
 --------- | -----------
 recipient | Email du destinataire
 subject | Sujet de l'email
-identifier | Paramètre optionel pour identifier en interne le message/envoi
+identifier(1-2) | Paramètres optionel pour identifier en interne le message/envoi
+email_originator | Paramètre pour changer le nom de l'expediteur dans l'email
+logo_url | Paramètre pour changer le logo afficher dans l'entête de l'email
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 message | Contenu du message
@@ -204,7 +208,7 @@ curl -X POST \
   --data "auth_key=mykey" \
   --data "auth_secret=mysecret" \
   --data "recipient=0602030405" \
-  --data "identifier=001" \
+  --data "identifier1=001" \
   --data "force_sending=false" \
   --data "message=Ceci est un example%0ATest"
 
@@ -215,12 +219,12 @@ curl -X POST \
   --data-raw '[
     {
       "recipient": "0602030405",
-      "identifier": "001",
+      "identifier1": "001",
       "force_sending": true,
       "message": "Ceci est un exemple%0ATest"
     }, {
       "recipient": "0702030405",
-      "identifier": "002",
+      "identifier1": "002",
       "force_sending": false,
       "message": "Ceci est un exemple2%0ATest"
     }
@@ -235,7 +239,7 @@ params = {
   auth_key: 'mykey',
   auth_secret: 'mysecret',
   recipient: '0602030405',
-  identifier: '001',
+  identifier1: '001',
   force_sending: false,
   message: 'Ceci est un exemple%0ATest'
 }
@@ -262,7 +266,7 @@ params = {
   auth_key: 'mykey',
   auth_secret: 'mysecret',
   recipient: '0602030405',
-  identifier: "001",
+  identifier1: "001",
   force_sending: false,
   message: 'Ceci est un exemple%0ATest'
 }
@@ -324,7 +328,8 @@ Nom | Description
 auth_key | Clé d'authentification
 auth_secret | Secret d'authentification correspondant à la clé ci-dessus
 recipient | Numéro de téléphone du destinataire
-identifier | Paramètre optionel pour identifier en interne le message/envoi
+identifier(1-2) | Paramètres optionel pour identifier en interne le message/envoi
+sms_originator | Paramètre pour changer le nom de l'expediteur dans le SMS
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 message | Contenu du message
 test_mode | Mode test, n'envoi pas réellement le message (optionnel)
@@ -341,7 +346,8 @@ Dans le cas d'un envoi multiple, le corps de la requête HTTP doit contenir un t
 Valeur | Description
 --------- | -----------
 recipient | Numéro de téléphone du destinataire
-identifier | Paramètre optionel pour identifier en interne le message/envoi
+identifier(1-2) | Paramètres optionel pour identifier en interne le message/envoi
+sms_originator | Paramètre pour changer le nom de l'expediteur dans le SMS
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 message | Contenu du message
 test_mode | Mode test, n'envoi pas réellement le message (optionnel)
@@ -363,7 +369,7 @@ curl -X POST \
   --data "email_subject=Email exemple" \
   --data "email_content=Ceci est un example%0ATest" \
   --data "sms_content=Ceci est un example%0ATest" \
-  --data "identifier=001" \
+  --data "identifier1=001" \
   --data "force_sending=false" \
   --data "unsubscribe_link=true" \
   --data "channel=both"
@@ -379,7 +385,7 @@ curl -X POST \
       "email_subject": "Email exemple",
       "email_content": "Ceci est un exemple%0ATest"
       "sms_content": "Ceci est un example%0ATest",
-      "identifier": "001",
+      "identifier1": "001",
       "force_sending": true,
       "channel": "both"
     }, {
@@ -388,7 +394,7 @@ curl -X POST \
       "email_subject": "Email exemple2",
       "email_content": "Ceci est un exemple2%0ATest"
       "sms_content": "Ceci est un example2%0ATest",
-      "identifier": "002",
+      "identifier1": "002",
       "force_sending": false,
       "unsubscribe_link": true,
       "channel": "both"
@@ -448,7 +454,10 @@ phone | Numéro de téléphone du destinataire
 email_subject | Sujet de l'email
 email_content | Contenu du message Email
 sms_content | Contenu du message SMS
-identifier | Paramètre optionel pour identifier en interne le message/envoi
+identifier(1-2) | Paramètres optionel pour identifier en interne le message/envoi
+email_originator | Paramètre pour changer le nom de l'expediteur dans l'email
+sms_originator | Paramètre pour changer le nom de l'expediteur dans le SMS
+logo_url | Paramètre pour changer le logo afficher dans l'entête de l'email
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 channel | Canal utilisé, peut être `sms`, `email`, `both`, `sms_first` ou `email_first`
@@ -470,7 +479,7 @@ phone | Numéro de téléphone du destinataire
 email_subject | Sujet de l'email
 email_content | Contenu du message Email
 sms_content | Contenu du message SMS
-identifier | Paramètre optionel pour identifier en interne le message/envoi
+identifier(1-2) | Paramètres optionels pour identifier en interne le message/envoi
 force_sending | Forcer l'envoie même si le destinataire est désinscrit (optionnel)
 unsubscribe_link | Paramètre optionel qui détermine si le liens de désincription doit être visible
 channel | Canal utilisé, peut être `sms`, `email`, `both`, `sms_first` ou `email_first`
@@ -490,7 +499,8 @@ curl -X GET \
   --data "with_error=true" \
   --data "limit=1" \
   --data "offset=0" \
-  --data "identifier=001" \
+  --data "identifier1=001" \
+  --data "identifier2=test" \
   --data "from=2020-01-01T14:00:00Z" \
   --data "from=2020-01-31T14:00:00Z"
 ```
@@ -509,10 +519,16 @@ curl -X GET \
       "email_subject": "Email exemple",
       "email_content": "Ceci est un example%0ATest",
       "sms_content": "Ceci est un example%0ATest",
-      "identifier": "001",
+      "custom_identifier1": "001",
+      "custom_identifier2": "test",
+      "email_originator": null,
+      "sms_originator": null,
+      "force_sending": false,
+      "unsubscribe_link": true,
       "has_error": false,
       "error_message": null,
-      "created_at": "2020-01-18T15:31:12Z"
+      "created_at": "2020-01-18T15:31:12Z",
+      "test_mode": false
     }
   ]
 }
@@ -533,7 +549,7 @@ auth_secret | Secret d'authentification correspondant à la clé ci-dessus.
 with_error | Récupérer uniquement les messages avec `true` ou sans `false` erreurs
 limit | Nombre maximum de messages retourné.
 offset | Ignore les `N` premiers messages.
-identifier | Limite aux messages avec le même identitfiant
+identifier(1-2) | Limite aux messages avec les mêmes identitfiants
 from | Retourne les messages après la date spécifié au format ISO8601.
 until | Retourne les messages avant la date spécifié au format ISO8601.
 test_mode | Filtre les messages selon leur mode (test ou non)
@@ -546,7 +562,8 @@ curl -X POST \
   "https://communication.avis-locataire.com/v1/messages_status" \
   --data "auth_key=mykey" \
   --data "auth_secret=mysecret" \
-  --data "identifier=001"
+  --data "identifier1=001" \
+  --data "identifier2=test"
 ```
 
 > La commande ci-dessus renvoie un JSON structuré comme ceci
@@ -577,7 +594,7 @@ Nom | Description
 --------- | -----------
 auth_key | Clé d'authentification
 auth_secret | Secret d'authentification correspondant à la clé ci-dessus
-identifier | Paramètre pour filtrer en interne le message/envoi
+identifier(1-2) | Paramètres pour filtrer en interne le message/envoi
 
 ## Informations supplémentaires
 
