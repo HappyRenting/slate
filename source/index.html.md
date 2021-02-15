@@ -550,8 +550,8 @@ with_error | Récupérer uniquement les messages avec `true` ou sans `false` err
 limit | Nombre maximum de messages retourné.
 offset | Ignore les `N` premiers messages.
 identifier(1-2) | Limite aux messages avec les mêmes identitfiants
-from | Retourne les messages après la date spécifié au format ISO8601.
-until | Retourne les messages avant la date spécifié au format ISO8601.
+from | Retourne les messages après la date spécifié au format ISO8601
+until | Retourne les messages avant la date spécifié au format ISO8601
 test_mode | Filtre les messages selon leur mode (test ou non)
 
 ## Statut globale des messages
@@ -607,6 +607,69 @@ email | Envoi le message uniquement par email (adresse email valide requis)
 both | Envoi le message par SMS et email
 sms_first | Envoi le message par SMS si le numéro est présent sinon envoi par email
 email_first | Envoi le message par email si l'adresse email est présente sinon envoi par SMS
+
+# API Rendez-vous
+
+## Webhook des flux
+
+> Exemple de retour JSON du webhook
+
+```js
+{
+  "status": "preset",
+  "channel": "email",
+  "start_at": "2020-06-12T12:00:00+02:00",
+  "end_at": "2020-06-12T12:45:00+02:00",
+  "duration": 45,
+  "location": "6 rue de la Place, Paris 75001",
+  "reminder_delay": 0,
+  "reminder_status": false,
+  "reminder_channel": "disabled",
+  "recipient": {
+    "first_name": "Jean",
+    "last_name": "DUPONT",
+    "email": "jean.dupont@email.com",
+    "phone": null,
+    "variables":[
+      { name: "Bâtiment", content: "B" },
+      { name: "Porte",  content: "845" }
+    ]
+  }
+}
+```
+
+Liste des attributs du rendez-vous :
+
+Nom | Description
+--------- | -----------
+status | Statut du rendez-vous (preset = prédéfini par le bailleur, approved = approuvé par le bailleur)
+channel | Canal de communication (SMS ou Email ou les deux)
+start_at | Date et heure de début du rendez-vous au format ISO8601
+end_at | Date et heure de fin du rendez-vous au format ISO8601
+duration | Durée du rendez-vous en minutes
+location | Lieux du rendez-vous
+reminder_delay | Délai avant le rendez-vous pour le rappel en heures
+reminder_status | Statut du rappel (true = envoyé, false = pas encore envoyé)
+reminder_channel | Canal de communication du rappel (SMS ou Email ou les deux)
+recipient | Objet JSON contenant les informations du destinataire (cf. tableau ci-dessous)
+
+Liste des attributs de l'objet JSON du destinataire :
+
+Nom | Description
+--------- | -----------
+first_name | Prénom du destinataire
+last_name | Nom de famille du destinataire
+email | L'Email du destinataire
+phone | Le numéro de téléphone du destinataire
+variables | Tableau d'objet JSON contenant les informations des variables du destinataire (cf. tableau ci-dessous)
+
+
+Liste des attributs de l'objet JSON des variables :
+
+Nom | Description
+--------- | -----------
+name | Nom de la variable
+content | Valeur pour la variable
 
 # Codes d'erreurs
 
