@@ -502,7 +502,7 @@ curl -X GET \
   --data "identifier1=001" \
   --data "identifier2=test" \
   --data "from=2020-01-01T14:00:00Z" \
-  --data "from=2020-01-31T14:00:00Z"
+  --data "until=2020-01-31T14:00:00Z"
 ```
 
 > La commande ci-dessus renvoie un JSON structuré comme ceci
@@ -607,6 +607,51 @@ email | Envoi le message uniquement par email (adresse email valide requis)
 both | Envoi le message par SMS et email
 sms_first | Envoi le message par SMS si le numéro est présent sinon envoi par email
 email_first | Envoi le message par email si l'adresse email est présente sinon envoi par SMS
+
+## Liste des désinscrits
+
+```shell
+curl -X GET \
+  "https://communication.avis-locataire.com/v1/unsubscribes" \
+  --data "auth_key=mykey" \
+  --data "auth_secret=mysecret" \
+  --data "limit=1" \
+  --data "offset=0" \
+  --data "from=2020-01-01T14:00:00Z" \
+  --data "until=2020-01-31T14:00:00Z"
+```
+
+> La commande ci-dessus renvoie un JSON structuré comme ceci
+
+```json
+{
+  "status": 200,
+  "unsubscribes": [
+    {
+      "id": 1,
+      "email": "exemple@email.com",
+      "created_at": "2020-01-18T15:31:12Z"
+    }
+  ]
+}
+```
+
+Cette requête permet de récupérer une liste des désinscrits.
+
+### Requête HTTP
+
+`GET https://communication.avis-locataire.com/v1/unsubscribes`
+
+### Paramètres de la requête
+
+Nom | Description
+--------- | -----------
+auth_key | Clé d'authentification.
+auth_secret | Secret d'authentification correspondant à la clé ci-dessus.
+limit | Nombre maximum de désinscrits retourné.
+offset | Ignore les `N` premiers désinscrits.
+from | Retourne les désinscrits après la date spécifié au format ISO8601
+until | Retourne les désinscrits avant la date spécifié au format ISO8601
 
 # API Rendez-vous
 
